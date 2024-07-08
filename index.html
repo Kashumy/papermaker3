@@ -1,4 +1,4 @@
-  
+ 
 
 <!-- PAPERMAKER 3 free license -->
 
@@ -426,6 +426,7 @@ function chooseFile() {
 </script>
   <script>
     function saveToFile() {
+      if(canJUMP==1){
 config.blocks.push([TILES.length,1,"/ NAN.png"])
 config.code = code;
 config.debugmode=0
@@ -442,7 +443,7 @@ let code2=JSON.stringify(config)
 
 
       a.click();
-    }
+    }}
 function saveToFileasJs() {
   config.blocks.push([TILES.length, 1, "/ NAN.png"])
   config.code = code;
@@ -3989,11 +3990,13 @@ function jump(){
 }
 let oneFor2s=0
 let canClick = true;
+let FirtOneJump=1
 function jump2(event) {
     event.preventDefault();
     if (canClick) {
-        if (canJUMP == 1) {
+        if (canJUMP == 1||FirtOneJump==1) {
             jumping();
+            FirtOneJump=1
             if (config.folder.sounds.player[0]) {
                 let newaudio;
                 const base64Wav = config.folder.sounds.player[0];
@@ -4032,7 +4035,7 @@ setTimeout(function(){
 var thix=0
 var thiy=0
 var blockspassed=0
-var updatevpifblockspassed=25
+var updatevpifblockspassed=20
 let by4=0
 var pausemove=0
 function movePlayer(dx, dy) {
