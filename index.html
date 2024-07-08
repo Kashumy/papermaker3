@@ -1,4 +1,4 @@
-
+  
 
 <!-- PAPERMAKER 3 free license -->
 
@@ -193,7 +193,7 @@ function playUpdateSound3() {
 </script>
 <script>
   function loadtestgame(){
-  var gccpath='./NRW.js'
+  var gccpath='./LNR'
 setTimeout(function (){
   fetch(gccpath)
     .then(response => response.text())
@@ -680,7 +680,7 @@ config.zoom=initialZoom * scaleFactor * 0.5;
     container3.style.zoom = currentZoom + (delta * 0.1);
   }
   function onMouseEnter() {
-    container3.style.border = "2px solid red"; 
+    //container3.style.border = "2px solid red"; 
   }
   function onMouseLeave() {
     container3.style.border = "1px solid black"; 
@@ -4053,15 +4053,28 @@ if(by4<3){
     lastplayerpos.shift(); // Remove the oldest element
   }
 }
-  
+  let smallestVect=0
+  if(viewportWidth<viewportHeight){
+    smallestVect=viewportWidth
+  }else{
+    smallestVect=viewportHeight
+  }
   blockspassed++;
+  if(speed<4){
   if (isScrolling && blockspassed > updatevpifblockspassed*speed) {
     blockspassed = 0
     if (config.roommode !== 1&&config.roommode !== 1) {
   updateViewport()}
     isScrolling = false;
   
+  }}else if (isScrolling && blockspassed > (viewportWidth/2.5)/Math.abs(speed-4)) {
+    blockspassed = 0
+    if (config.roommode !== 1&&config.roommode !== 1) {
+  updateViewport()}
+    isScrolling = false;
+  
   }
+  
   playerX += dx;
   thiy=dy;
   thix=dx;
