@@ -1,42 +1,19 @@
 
 
  
- 
 
 <!-- PAPERMAKER 3 free license -->
 
   <!-- VERSION : 3+ -->
 
-   <!-- - i will add if i can - - - - - -->
-   <!-- - - - - - - - - - - - - - - - - -->
-   <!--                                 -->
-   <!-- ° Bluetooth Multiplayer         -->
-   <!--                                 -->
-   <!-- ° More optimisation             -->
-   <!--                                 -->
-   <!-- ° I will delete every Polish    -->
-   <!-- comments that i added and i wi- -->
-   <!-- -ll make it more friendly to -  -->
-   <!-- modify                          -->
-   <!--                                 -->
-   <!-- - - - - - - - - - - - - - - - - -->
-
-
-<!-- list of sm js functions -->
-<!-- ----------------------- –->
+<!-- list  -->
+<!-- config,
 updateViewport,
 moveTilesRandomly,
 buildBlock,
-loop
-<!-– ----------------------- -->
+loop-->
 
-<!-- how it work             -->
-<!-- ----------------------- –->
-the config variable is a variab
-le that have your game project
 
-#Iblocks is menu with blocks that you added
-<!-– ----------------------- -->
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
@@ -3881,16 +3858,18 @@ if (currentHp < 1) {
 }
                     if (currentHp < 1) {
                       config.bg=config.oldbg
-                      const base64WavU = config.oldmusic;
+                      
                         playerY = config.spawnY;
                         playerX = config.spawnX;
-if(base64WavU!==undefined&&base64WavU!==null&&base64WavU){
+                        if(config.oldmusic!==undefined&&config.oldmusic!==null&&config.oldmusic){
+                        const base64WavU = config.oldmusic;}
+if(base64WavU!==undefined&&base64WavU!==null&&base64WavU&&config.oldmusic!==undefined&&config.oldmusic!==null&&config.oldmusic){
                         if (audioInstance&&base64WavU.length>20) {
 
                           audioInstance.pause();
                           audioInstance.currentTime = 0;
                           audioInstance = null;
-                        }}
+                        }
                         if (config.music !== ''&&base64WavU.length>20) {
 
                           audioInstance = new Audio();
@@ -3902,7 +3881,7 @@ if(base64WavU!==undefined&&base64WavU!==null&&base64WavU){
                           audioInstance.play();
                           audioInstance.loop = true;
                           toonce = 0;
-                        }
+                        }}
                         config.HpBarConfiguration.numberHP=config.HpBarConfiguration.maxHp
                         setTimeout(updateViewport,50)
                         setTimeout(updateViewport,20)
@@ -5168,7 +5147,7 @@ function toggleLayers() {
 Visuals
 </div>
 <div style="background: coral" onclick="visibilitytoggle('SoundMaker')">Sound Maker</div>
-    <div style="background: coral" id="" onclick="hideee()">Start drawing</div>
+    <div style="background: coral" id="" onclick="hideee()">open drawing editor</div>
 <div   onclick="saveToFile()">SaveToProjectFile</div>
 <div   onclick="saveToFileasJs()">SaveAsFinnalProjectJSfile</div>
 <div onclick="togglemenu();playUpdateSound3();toggleMENS()" >
@@ -8429,7 +8408,7 @@ config.spawnY=config.spawnY+0.9
     margin-top: 7px;
     width: 220px;
     height: 220px;
-    background: #FCFCFC;
+    background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAA1JREFUGFdjePfu3X8ACWIDyvrS0aMAAAAASUVORK5CYII=');
     image-rendering: pixelated;
   }
 
@@ -8470,7 +8449,7 @@ config.spawnY=config.spawnY+0.9
     document.querySelector('Maintenance').classList.toggle('hidden')
   }
     document.getElementById('startBtn').addEventListener('click', function() {
-      let dimensions = (prompt("Enter canvas width height:"));
+      let dimensions = (prompt("Enter canvas (width height) Enter width-space-height example:16 16"));
       
       
 
