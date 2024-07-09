@@ -46,8 +46,7 @@ body{
   font-family: font;
 }
 </style>
-<script src="//cdn.jsdelivr.net/npm/eruda"></script>
-<script>eruda.init();</script>
+
 
 <style>
   gui{
@@ -76,6 +75,9 @@ var config ={  "HpBarConfiguration": {
 </script>
 <script src="./defaul.js"></script>
 <script src="./bigexample.js"></script>
+
+<script src="//cdn.jsdelivr.net/npm/eruda"></script>
+<script>eruda.init();</script>
 <!-- HEY PUT HERE YOUR PROJECt Path -->
 <!-- ---------+----+----+----------- -->
 <!-- ---------+----+----+----------- -->
@@ -1761,6 +1763,7 @@ let currentdimension=dimension
 let currentbase64img=''
 var currentsoundformessage=''
 let oldGravity=null;
+var base64WavY=null;
 function moveTilesRandomly() {
   if(stop==0){
     for (let tileId in tileConfig) {
@@ -2838,17 +2841,20 @@ if (collisioneventprojectilesize !== null && collisioneventprojectilesize !== un
                   requestAnimationFrame(updateViewport)
                 }
 if (changeLoopMusic !== undefined && changeLoopMusic !== null) {
+  if(base64WavY!==changeLoopMusic){
+  base64WavY = changeLoopMusic;
+  
     if (audioInstance) {
         audioInstance.pause();
         audioInstance.currentTime = 0;
-        audioInstance = null;
+     //   audioInstance = null;
     }
     if (changeLoopMusic !== '') {
-        const base64Wav = changeLoopMusic;
+        
         currentbase64=changeLoopMusic
 
-        audioInstance = new Audio();
-        audioInstance.src = base64Wav;
+     //   audioInstance = new Audio();
+        audioInstance.src = base64WavY;
         audioInstance.setAttribute('preload', 'auto');
 
         document.body.appendChild(audioInstance);
@@ -2861,19 +2867,23 @@ if (changeLoopMusic !== undefined && changeLoopMusic !== null) {
         });
         audioInstance.loop = true;
         toonce = 0;
-    }
+    }}
 } else if (changeLoopMusicMain == 1) {
   if(currentbase64!==config.music&&currentbase64!==''){
+  if(base64WavY!==config.music){
+  base64WavY = config.music;
+  
     if (audioInstance) {
         audioInstance.pause();
         audioInstance.currentTime = 0;
-        audioInstance = null;
+     //   audioInstance = null;
     }
     if (config.music !== '') {
-        const base64Wav = config.music;
-currentbase64=changeLoopMusic
-        audioInstance = new Audio();
-        audioInstance.src = base64Wav;
+        
+        currentbase64=changeLoopMusic
+
+     //   audioInstance = new Audio();
+        audioInstance.src = base64WavY;
         audioInstance.setAttribute('preload', 'auto');
 
         document.body.appendChild(audioInstance);
@@ -2886,7 +2896,7 @@ currentbase64=changeLoopMusic
         });
         audioInstance.loop = true;
         toonce = 0;
-    }
+    }}
 }else{
 //  alert(currentbase64)
 }}
