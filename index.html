@@ -1,5 +1,4 @@
-
-
+ 
  
 
 <!-- PAPERMAKER 3 free license -->
@@ -3862,7 +3861,7 @@ if (currentHp < 1) {
                         playerY = config.spawnY;
                         playerX = config.spawnX;
                         if(config.oldmusic!==undefined&&config.oldmusic!==null&&config.oldmusic){
-                        const base64WavU = config.oldmusic;}
+                        var base64WavU = config.oldmusic;
 if(base64WavU!==undefined&&base64WavU!==null&&base64WavU&&config.oldmusic!==undefined&&config.oldmusic!==null&&config.oldmusic){
                         if (audioInstance&&base64WavU.length>20) {
 
@@ -3881,7 +3880,7 @@ if(base64WavU!==undefined&&base64WavU!==null&&base64WavU&&config.oldmusic!==unde
                           audioInstance.play();
                           audioInstance.loop = true;
                           toonce = 0;
-                        }}
+                        }}}
                         config.HpBarConfiguration.numberHP=config.HpBarConfiguration.maxHp
                         setTimeout(updateViewport,50)
                         setTimeout(updateViewport,20)
