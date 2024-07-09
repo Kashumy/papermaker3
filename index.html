@@ -1,4 +1,6 @@
 
+
+ 
  
 
 <!-- PAPERMAKER 3 free license -->
@@ -3879,19 +3881,20 @@ if (currentHp < 1) {
 }
                     if (currentHp < 1) {
                       config.bg=config.oldbg
-                      const base64Wav = config.oldmusic;
+                      const base64WavU = config.oldmusic;
                         playerY = config.spawnY;
                         playerX = config.spawnX;
-                        if (audioInstance&&base64Wav.length>20) {
+if(base64WavU!==undefined&&base64WavU!==null&&base64WavU){
+                        if (audioInstance&&base64WavU.length>20) {
 
                           audioInstance.pause();
                           audioInstance.currentTime = 0;
                           audioInstance = null;
-                        }
-                        if (config.music !== ''&&base64Wav.length>20) {
+                        }}
+                        if (config.music !== ''&&base64WavU.length>20) {
 
                           audioInstance = new Audio();
-                          audioInstance.src = base64Wav;
+                          audioInstance.src = base64WavU;
                           audioInstance.setAttribute('preload', 'auto');
 
                           document.body.appendChild(audioInstance);
@@ -3927,16 +3930,16 @@ updateHpBar(config.HpBarConfiguration.numberHp);
                     audioInstance = null;
                   }
                   if (config.music !== '') {
-                    let base64Wav = config.music;
+                    let base64WavZ = config.music;
                   if(config.oldmusic!==undefined&&config.oldmusic!==null){
 if (config.oldmusic.slice(0, 10) !== config.oldmusic) {
-    base64Wav = config.oldmusic;
+    base64WavZ = config.oldmusic;
 } else {
-    base64Wav = config.music;
+    base64WavZ = config.music;
 }}
 
                     audioInstance = new Audio();
-                    audioInstance.src = base64Wav;
+                    audioInstance.src = base64WavZ;
                     audioInstance.setAttribute('preload', 'auto');
    document.body.appendChild(audioInstance);
 
