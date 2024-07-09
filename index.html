@@ -1,3 +1,4 @@
+
  
 
 <!-- PAPERMAKER 3 free license -->
@@ -67,6 +68,9 @@ body{
   font-family: font;
 }
 </style>
+<script src="//cdn.jsdelivr.net/npm/eruda"></script>
+<script>eruda.init();</script>
+
 <style>
   gui{
     margin-left: 50px
@@ -3996,7 +4000,7 @@ function jump2(event) {
     if (canClick) {
         if (canJUMP == 1||FirtOneJump==1) {
             jumping();
-            FirtOneJump=1
+            FirtOneJump=0
             if (config.folder.sounds.player[0]) {
                 let newaudio;
                 const base64Wav = config.folder.sounds.player[0];
