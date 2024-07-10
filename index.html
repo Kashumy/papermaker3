@@ -95,13 +95,20 @@ var config ={  "HpBarConfiguration": {
   document.querySelector('e_gameinfoinput').style.display = "none"
 }
 </script>
-
 <script>
 
   const textsArray = [
 `
-<div style=' color:lime; text-shadow: #0F0 1px 0 20px;'> 
-PAPER MAKER 3+</div>
+<div style=' color: rgb(200,240,240); text-shadow:
+0 0 7px #fff,
+0 0 10px #fff,
+0 0 21px #fff,
+0 0 42px #0fa,
+0 0 82px #0fa,
+0 0 92px #0fa,
+0 0 102px #0fa,
+0 0 151px #0fa; height:100px'> 
+papermaker 3+ engine</div>
 `,];
 
 </script>
@@ -177,7 +184,7 @@ function playUpdateSound3() {
 </script>
 <script>
   function loadtestgame(){
-  var gccpath='./LNR'
+  var gccpath='./RWG'
 setTimeout(function (){
   fetch(gccpath)
     .then(response => response.text())
@@ -1826,6 +1833,7 @@ regenerateplayerpos,
 removefroviewpirtifoutside,
 BLOCKTYPE
 
+
 , nothing 
         ] = tileConfig[tileId];
 
@@ -2501,6 +2509,9 @@ if(oldGravity!==null&&oldGravity!==undefined&&distanceToPlayer > dist&&distanceT
   console.log(oldGravity)
 }
                 if(distanceToPlayer <= dist ){
+                  if(collisionEVAL!==null&&collisionEVAL!==undefined&&collisionEVAL){
+eval(collisionEVAL)
+                  }
 if (BLOCKTYPE == 'ladder') {
   movePlayer(0, -(config.gravitypower*gravityvelocity||0.10))
    canJUMP=1
@@ -5513,6 +5524,9 @@ var testexample={"examples":{"alltiles0":[2,"move",0,3,0,1,[0,0,999999,999999],t
         }
     }
 }
+setTimeout(function (){
+  displayEntities();
+},3000)
     function editEntity(entityName) {
         const options = config.entities[entityName]
 
@@ -5602,22 +5616,22 @@ if (file) {
             "<p style='color:lime' > Movement Type(avoid,move,follow)",
             "<p style='color:lime' > Distance(num)",
             "<p style='color:lime' > Random Movement(1/0/3 for Move)",
-            "<p style='color:red' > Collision for a player(1/0)",
+            "<p style='color:red' > Collision-Block for a player(1/0)",
             "<p style='color:red' > Initial HP(Num)",
             "Area For Entity([startX,startY,endX,endY])",
             "Delete Bool(Boolean)",
-            "<p style='color:lime' > arena Pattern moving ([[x,y],[x,y]])",
+            "<p style='color:lime' > arena Pattern moving ([[x,y],[x,y]]) [[-2,0],[2,0]] etc",
             "<p style='color:cyan' > Hurt Player(1/0)",
-            "Script doesn't work if sprite is out of viewport(1/0)",
+"<p style='color:lime' >Script Doesn't work if sprite is out of Viewport  <p style='color:blue'>(virtualization)</p></p>", 
             "Score1(1/0)",
-            "<p style='color:yellow' >important !: Collision Object type ('player') default class that it will be default even for example move follow for player",
-            "Detect Enabled",
+            "<p style='color:yellow' >important !: Collision Object type 'player' default class that it will be default target. for example move follow for player",
+            "Detect Enabled ( I don't remember what this doing )",
             "<p style='color:cyan' > Collision with Other Blocks(1/0)",
             "Delete When Custom Move Ended(1/0)",
             "<p style='color:red' > Your Shooting attack can Hurt this entity (1/0)",
             "Collectable(1/0)",
             "SpawnPointBlock(1/0)",
-            "<p style='color:cyan' > CantBeDamaged(1/0) only By player doesn't wor for example for a despawn",
+            "<p style='color:cyan' > CantBeDamaged(1/0) only By player doesn't work for example for a despawn",
             "Teleport by([y,x])",
             "<p style='color:pink' > Move Tiles when it is defaced by([(i...),x,y])",
             "<p style='color:pink' > spawn [duration,(i...)]",
@@ -5625,8 +5639,8 @@ if (file) {
             "goes 1 tick one direction good for projectiles :) (1)on else off",
 "changeLoopMusicTodefaul",
             "T: changeLoopMusic",
-            "ability ['config[optionName]',Value,'operator '+' '-' '=''] options: hp maxhp shoot airjump",
-            "noAttackfunction(1/0)",
+            "ability ['config[optionName]',Value,'operator '+' '-' '=''] options: (hp maxhp shoot airjump)",
+            "<p style='color:orange' >noAttackfunction (1/0) you don't need to click attack to make damage for this entity</p>",
             "Respawn(1/0)",
             "collisionevent=projectilespeed(num)",
             "collisionevent=projectilenomove(1/0)",
@@ -5635,21 +5649,21 @@ if (file) {
             "T: collisioneventprojectiletexture",
             "collisionevent=projetitlesize number",
             "Code In Entities 0 _ 0 how ? ['1:\\n2:\\n3:',0]",
-            "Puzzle Block (1/0) with i(object) // doesn't work for now ",
+            "Puzzle Block (1/0) with i(object) / you dont need this if you use avoid, distance:2, collision block for player, speed: 6",
             "back to start position when pattern ended",
             "<p style='color:lime' > gravity",
-            "changeVariablecollisionevent [variable,value]",
+            "change Code Variablecollisionevent [variable,value]",
             "T: hurttexture ",
             " hurtdelaytexture (number ms)",
             "<p style='color:lime' > reversedistance !( distance ) <num>",
 "T: collisiontexture",
 "distance2 <number> /disabled",
-"movementType2 [move avoid follow]/disabled",
+"movementType2 [move avoid follow]/ do not work",
 "collisionobject2 [name]/disabled",
 "whendistance2makepattern (in PM 2.9 full)/disabled",
 "<p style='color:orange' > < NPC > Dialogue by an collision ['hello','world']",
-"collision (eval javascript ) / doesn't work",
-"NPCdialogueends_remove (1)else",
+"<p style='color:orange' >collision (eval javascript ) </p>",
+"NPCdialogueends_remove (1) else do not",
 "<p style='color:pink' > NPCdialogueends_spawn and kill this (i...)",
 "collisiondistance <num> 'disabled'",
 "Spawn 2 [duration,(i...)]",
@@ -5695,7 +5709,8 @@ if (file) {
 "ifvariablekillthiswhencollision ['definedVariable','=,>,<,!=',number] ",
 "ifvariablekillthiswhenitspawnonmap ['definedVariable','=,>,<,!=',number] ",
 "<p style='animation: 5s rainbow infinite; filter:sepia(50%);' >Interesting: </p> regenerate Player position by a ticks (10) is more like a 1 second and use one direction follow good for projectile this will reset player current position by a time (enter number) ",
-"<p style='animation: 5s rainbow infinite; filter:sepia(50%);' >Interesting: </p> delete If outside of viewport also need virtualization anabled (enter 1/0 good for blocks) ",
+"<p style='color:lime' >delete If it is outside of viewport also need virtualization anabled ( enter 1/0 good for blocks )</p>",
+
 "<p style='animation: 5s rainbow infinite; filter:sepia(50%);' >Interesting: </p> Block Type: 'float','ladder','water'  (enter) ",
 
 "<p style='animation: 5s rainbow infinite;'>3.0[nafu] not a finnal update  50% of this instructions configuration are not understandable for a human :P  </p>",
