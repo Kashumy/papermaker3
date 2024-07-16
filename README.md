@@ -1,9 +1,9 @@
 ![Papermaker](https://raw.githubusercontent.com/Kashumy/assets/main/papermaker.png)
-## EXPERIMENTAL 
-Yey New Update PAPERMAKER3 ENGINE EDITOR
-### Run At
+` EXPERIMENTAL 🌺`
+Howdy this is the newest version of papermaker3 engine editor
+### Run 🌱
 https://kashumy.github.io/papermaker3/
-### What i wanted to do
+### What i want to-do 🌵
 1. bug fix everything that crashes game or freeze it
 2. i will optimize the game
 3. maybe will add new velocity to player and Bluetooth API to play with your friends :)
@@ -12,7 +12,7 @@ https://kashumy.github.io/papermaker3/
 6.  also i will add some bugfixes with collisions if you are really fast 
 
 
-## IMPORTANT: 
+## IMPORTANT 💥: 
 [![Important Informations](https://raw.githubusercontent.com/Kashumy/assets/main/important.png)](IMPORTANT.md)
 
 
