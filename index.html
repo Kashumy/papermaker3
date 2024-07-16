@@ -1,4 +1,4 @@
-  
+ 
  
 
 <!-- PAPERMAKER 3 free license -->
@@ -3830,6 +3830,7 @@ let test2 = 0;
 var newcollisions = [".hurtblock"];
 let to205 = true;
 function checkit() {
+  if( config.debugmode==0 && isgamepaused==0 ) {
     for (let tileClass of newcollisions) {
         const tiles = document.querySelectorAll(tileClass);
         for (let tile of tiles) {
@@ -3951,7 +3952,7 @@ if (config.oldmusic.slice(0, 10) !== config.oldmusic) {
             }
         }
     }
-}
+}}
 function normspeed() {
   const nearestDistanceThreshold = 25; 
   let nearestDistance = Number.MAX_SAFE_INTEGER;
@@ -5220,8 +5221,8 @@ function toggleLayers() {
 <hr>
 <div onclick="visibility('.menu2-content'); toggleMENS()" style="animation: 5s rainbow infinite cubic-bezier(0.19, 1, 0.22, 1);" style="background: yellow">Code
 </div>
-<div onclick="toggleVS(); playUpdateSound3();toggleMENS()"  style="background: deepskyblue">
-Visuals
+<div onclick="visibility('.menu-content'); playUpdateSound3();toggleMENS()"  style="background: red">
+Close Menu
 </div>
 
 <hr>
@@ -5260,7 +5261,7 @@ Visuals
 <div onclick="
 loadtestgame();toggleMENS()
 ">
-  load Game test (robot wants explore)( copy of robot wants icecream )
+  load Game robot wants fangame
 </div>
 <script>
 </script>
@@ -5856,12 +5857,44 @@ collisionobject2,
 whendistance2makepattern,*/
     }
 </script>
-<div onclick="emptyproj()">
+<div onclick="emptyproj()" style="background: coral">
  makeEmptyProject (clearing Map,gravity,Blocks etc)
 </div>
 <div onclick="empty20()">
 empty( tiles/ not map )
+</div> <br>
+<div onclick="empty02()">
+  empty( map / not tiles )
+</div> <br>
+<div style="background: rebeccapurple"  onclick="backteleport()">
+EXECUTE:  Teleport to spawn pos
 </div>
+<script>
+function backteleport(){
+  playerY=config.spawnY;
+  playerX=config.spawnX;
+  updateViewport()
+}
+  function empty20() {
+  playerY = 200;
+  playerX = 200;
+  TILES = []
+  
+  document.querySelector('#Econtent').innerHTML = ""
+  document.querySelector('#Iblocks').innerHTML = ""
+  updateViewport()
+}
+function empty02(){
+playerY=200;
+playerX=200;
+
+tileMap=[[],[],[]]
+gravity=0
+document.querySelector('#Econtent').innerHTML=""
+
+updateViewport()
+}
+</script>
 <div onclick="
 newWidth = config.width*config.zoomadd;
 newHeight = config.height*config.zoomadd;
@@ -6113,7 +6146,7 @@ function emptyproj(){
   tileMap=[[],[],[]]
   gravity=0
   document.querySelector('#Econtent').innerHTML=""
-  document.querySelector('.f').innerHTML=""
+  document.querySelector('#Iblocks').innerHTML=""
   updateViewport()
 }
 
