@@ -1,4 +1,4 @@
-[![Papermaker](https://raw.githubusercontent.com/Kashumy/assets/main/papermaker.png)]
+![Papermaker](https://raw.githubusercontent.com/Kashumy/assets/main/papermaker.png)
 ## EXPERIMENTAL 
 Yey New Update PAPERMAKER3 ENGINE EDITOR
 ### Run At
