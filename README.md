@@ -9,3 +9,6 @@ https://kashumy.github.io/papermaker3/
 4. i will make it more friendly to use on computer if you doesn't have mobile phone
 5.  very important: I need to make sure that the music does not get deleted from the config after some time and that it is still possible to change music and add audio content to play
 6.  also i will add some bugfixes with collisions if you are really fast 
+
+
+## IMPORTANT: https://github.com/Kashumy/papermaker3/blob/main/IMPORTANT.md
