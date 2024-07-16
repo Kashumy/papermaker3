@@ -1,4 +1,4 @@
- 
+  
  
 
 <!-- PAPERMAKER 3 free license -->
@@ -11,7 +11,6 @@ updateViewport,
 moveTilesRandomly,
 buildBlock,
 loop-->
-
 
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -96,20 +95,30 @@ var config ={  "HpBarConfiguration": {
 }
 </script>
 <script>
+function toggle(value) {
+    return value === 0 ? 1 : 0;
+}
+
 
   const textsArray = [
 `
-<div style=' color: rgb(200,240,240); text-shadow:
-0 0 7px #fff,
-0 0 10px #fff,
-0 0 21px #fff,
-0 0 42px #0fa,
-0 0 82px #0fa,
-0 0 92px #0fa,
-0 0 102px #0fa,
-0 0 151px #0fa; height:100px'> 
-papermaker 3+ engine</div>
-`,];
+<div style=' color: rgb(100,250,240);  height:90vh; width:90vw'> 
+just a pme 3+ experimental edition </div>
+`,`
+<div style=' color: rgb(100,250,240);  height:90vh; width:90vw'>
+  fixed:
+  
+- some bugs 
+- you can now fully edit textures animation of a player
+- jumping , bugs
+  todo:
+  
+- add JavaScript editor+ to add code that execute JavaScript 
+- add object inspection that show classes position styles of every element on the page and JavaScript elements and variables function inspection and code inspection 
+- fix bug with movetilesrandomly() if you killed something always move tiles if it is anabled
+- do not disconnect domain
+  </div>
+`];
 
 </script>
     <script>
@@ -184,7 +193,7 @@ function playUpdateSound3() {
 </script>
 <script>
   function loadtestgame(){
-  var gccpath='./RWG'
+  var gccpath='./robotgame-ex'
 setTimeout(function (){
   fetch(gccpath)
     .then(response => response.text())
@@ -416,8 +425,10 @@ function chooseFile() {
 
 </script>
   <script>
+  var isonfloor=0
+  var cantsavebugfix=1
     function saveToFile() {
-      if(canJUMP==1){
+      if(isonfloor==1||cantsavebugfix==0){
 config.blocks.push([TILES.length,1,"/ NAN.png"])
 config.code = code;
 config.debugmode=0
@@ -611,6 +622,7 @@ function saveToFileasJs() {
   <div id="viewport" >
   <div id="player" class="player">
   </div>
+  <div id="playerskin"></div>
   <div id="content"></div>
     <div id="Econtent" ></div>
     <div id="Scontent" ></div>
@@ -1051,19 +1063,17 @@ left:30px;
 }
 .player {
   position: absolute;
+ 
   z-index: 6;
-  width: 14px;
+  opacity:0;
+  width: 16px;
   background: #2D2D2D;
-  height: 14px;
-  display: flex;
-  justify-content: center;
-  text-align: center;
-  align-items: center;
-  background-image: none;
-  background-size: 100%;
-  image-rendering: pixelated;
+  height: 16px;
+  
+  opacity:0;
+ 
 }
-.player::after {
+/*.player::after {
   content: ''; 
   position: absolute;
   z-index: 6; 
@@ -1072,8 +1082,26 @@ left:30px;
   background: inherit;
   background-size: 100%; 
   transform: scale(1.2); 
-  transform: var(--after-transform);
+  
+}*/
+#playerskin{
+  position: absolute;
+  content: '';
+z-index: 6;
+width: 21px;
+
+height: 21px;
+background: #42445A;
+
+
+
+
+background-size: 200%;
+transform: var(--after-transform);
+
+image-rendering: pixelated;
 }
+
 #fps{
   position: fixed;
   display: none;
@@ -3283,37 +3311,8 @@ if(config.folder!==undefined){
   document.body.appendChild(newaudio);
   newaudio.play();
   }}
-                  if (tile.dataset.hp < 1) {
-const currentX = parseInt(tile.dataset.x)
-const currentY = parseInt(tile.dataset.y)
-const currentS = parseInt(tile.dataset.s)
-const existingBlockIndex = tileMap[dimension].findIndex(block => 
-    parseInt(block[0]) === currentX && parseInt(block[1]) === currentY && parseInt(block[2]) === currentS
-);
-setTimeout(function() {
-  if (onece5 == 1) {
-    if (finishproject == 1) {
-      onece5 = 0
-      if (existingBlockIndex !== -1) {
-        tileMap[dimension].splice(existingBlockIndex, 1);
-      }
-      setTimeout(function() {
-        onece5 = 1
-      }, 1000)
-    }
-  }
-}, 1000)
-if(movetilesdeffacted!==undefined&&movetilesdeffacted!==null){
-  movemap(movetilesdeffacted[1],movetilesdeffacted[2],movetilesdeffacted[0]);
+                  if (tile.dataset.hp < 1) {KillThis()
 }
-                    if (score1 == 1) {
-                      score += 1
-                    } else {
-                      killed += 1;
-                    }
-                    tile.remove();
-                    deletedtiles.push(tile);
-                  }
                                       }
 }
 }
@@ -4002,6 +4001,7 @@ function jump2(event) {
     if (canClick) {
         if (canJUMP == 1||FirtOneJump==1) {
             jumping();
+            isonfloor=0
             FirtOneJump=0
             if (config.folder.sounds.player[0]) {
                 let newaudio;
@@ -4020,7 +4020,7 @@ function jump2(event) {
             canClick = false;
             setTimeout(function() {
                 canClick = true;
-            }, 1000); 
+            }, 700); 
         }
     }
 }
@@ -4045,6 +4045,7 @@ var updatevpifblockspassed=20
 let by4=0
 var pausemove=0
 function movePlayer(dx, dy) {
+  
   if(pausemove==0){
   const maxHistoryLength = 50;
 
@@ -4094,7 +4095,33 @@ if(by4<3){
   player.style.left = playerX * tileSize2 + 'px';
   player.style.top = playerY * tileSize2 + 'px';
   }collision();
+  
+  if(document.getElementById('player')&&document.getElementById('playerskin')){
+  
+  var playerbox=document.getElementById('player')
+  var playerlayer=document.getElementById('playerskin')
+  playerlayer.style.left=playerbox.style.left
+  playerlayer.style.top=playerbox.style.top
+  playerlayer.style.background=playerbox.style.background
+  playerlayer.style.backgroundImage=playerbox.style.backgroundImage
+  if(config.playersizeHasHitBox==0){
+  var playerf = document.querySelector('#playerskin');
+
+var scaleValue = parseFloat(config.playersizeNOHITBOX);
+
+//var playerAfterStyle = window.getComputedStyle(player, '::after');
+
+var newAfterTransform = `scale(${scaleValue})`;
+playerf.style.setProperty('--after-transform', newAfterTransform);
+playerf.style.backgroundSize="100%"
+}else{
+  var playerf = document.querySelector('#playerskin');
+document.querySelector('#playerskin').style.transform=`scale(${parseFloat(config.playersizeNOHITBOX)})`
+playerf.style.backgroundSize="100%"
 }
+  
+  
+}}
 function setPlayer(dx, dy) {
   playerX = dx;
   thiy = dy;
@@ -4286,7 +4313,9 @@ var collidingjump2=0
             setTimeout(normspeed, 1000)
           }
 if (rect1.bottom +6 > rect2.top - wallThickness && rect1.top < rect2.top && rect1.right > rect2.left +7  && rect1.left < rect2.right-7 ) {
+  isonfloor=1
 canJUMP=1
+airJump=0
 gravityvelocity=1
 if(collidingjump2==0){
   collidingjump=1
@@ -4354,6 +4383,18 @@ var tlo2 = 0
       var yyy=0
       let yzd=0
 function loop() {
+  if (document.getElementById('Jump')) {
+  cantsavebugfix=1
+}else{
+  cantsavebugfix=0
+}
+  var playerbox=document.getElementById('player')
+  var playerlayer=document.getElementById('playerskin')
+  playerlayer.style.left=playerbox.style.left
+  playerlayer.style.top=playerbox.style.top
+  playerlayer.style.background=playerbox.style.background
+  playerlayer.style.backgroundImage=playerbox.style.backgroundImage
+  
   if(isgamepaused==1){
 classicspeed = 8
 speed = 8
@@ -4410,17 +4451,18 @@ if (!('playersizeHasHitBox' in config)) {
   config['playersizeHasHitBox'] = 0;
 }
 if(config.playersizeHasHitBox==0){
-  var player = document.querySelector('.player');
+  var player = document.querySelector('#playerskin');
 
 var scaleValue = parseFloat(config.playersizeNOHITBOX);
 
-var playerAfterStyle = window.getComputedStyle(player, '::after');
+//var playerAfterStyle = window.getComputedStyle(player, '::after');
 
 var newAfterTransform = `scale(${scaleValue})`;
 player.style.setProperty('--after-transform', newAfterTransform);
+player.style.backgroundSize="100%"
 }else{
-document.querySelector('.player').style.transform=`scale(${parseFloat(config.playersizeNOHITBOX)})`
-
+document.querySelector('#playerskin').style.transform=`scale(${parseFloat(config.playersizeNOHITBOX)})`
+player.style.backgroundSize="100%"
 }
 let resizableDiv=document.getElementById('viewport')
 const newWidth=config.width
@@ -4535,15 +4577,7 @@ document.addEventListener('keyup', function(event) {
     } else {
         checkIfElementExited(player, viewport);
     }
-    if (downButtonDown == 1) {
-        movdown();
-        if(config.v>0&&config.v){
-if(config.folder){
-if(config.folder.texture.player[6]){
-document.querySelector('.player').style.background=`url(${config.folder.texture.player[6]})`
-}
-}}
-    }
+    
     if (leftButtonDown == 0 && upButtonDown == 0 && rightButtonDown == 0 && downButtonDown == 0 && isjumping == false) {
       if (playerskin) {
         document.querySelector('.player').style.background = `url(${playerskin})`
@@ -4570,6 +4604,13 @@ document.querySelector('.player').style.background=`url(${config.folder.texture.
         document.querySelector('.player').style.background = `url(${config.folder.texture.player[5]})`
       }}}
     }
+    if(ostclick=="up"){
+      if(config.v>0&&config.v){
+      if(config.folder){
+      if (config.folder.texture.player[9]) {
+        document.querySelector('.player').style.background = `url(${config.folder.texture.player[9]})`
+      }}}
+    }
     if(isjumping==true){
       if(config.v>0&&config.v){
       if(config.folder){
@@ -4585,6 +4626,15 @@ document.querySelector('.player').style.background=`url(${config.folder.texture.
         document.querySelector('.player').style.background=`url(${config.folder.texture.player[1]})`
         }
         }}
+    }
+    if (downButtonDown == 1) {
+        movdown();
+        if(config.v>0&&config.v){
+if(config.folder){
+if(config.folder.texture.player[6]){
+document.querySelector('.player').style.background=`url(${config.folder.texture.player[6]})`
+}
+}}
     }
     if (upButtonDown == 1) {
         movup();
@@ -4602,6 +4652,7 @@ document.querySelector('.player').style.background=`url(${config.folder.texture.
           document.querySelector('.player').style.background=`url(${config.folder.texture.player[2]})`
          }}}
     }
+    
     if (movePlayer(0, 0)) {
     } else {
         thix = 0;
@@ -4649,6 +4700,7 @@ document.querySelector('.player').style.background=`url(${config.folder.texture.
 var isjumping=false;
 let airJump=0
 function jumping() {
+  
   if(config.airjump<=airJump){
     canJUMP = 0;
     airJump=0
@@ -4797,6 +4849,11 @@ function cofnijczas(ilerazycofnac) {
 </body>
 </html>
 <style>
+.enginebox{
+  background:url('./boxes.png');
+  background-size: 100% 100%;
+  
+}
   .added{
     pointer-events: all;
   }
@@ -4817,11 +4874,11 @@ function cofnijczas(ilerazycofnac) {
 <!--<div onclick="toggleUplayer()" style="width:50px; height:50px; background: url('./zlayer1.png') center center/contain no-repeat; color:lime; text-align:center; font-size:30px; line-height:30px; position:absolute; right: 215px; top:16px; z-index: 99" class="notaproject"></div>
 <script>
 </script>-->
-<div class="f notaproject" id="sus" style="position: absolute; width: 210px; height: calc(100vh - 2px) ; background: url('./box (3).png'); image-rendering: pixelated; background-size: 100% 100%; z-index: 999999;overflow: hidden;left:0;
+<div class="f notaproject enginebox" id="sus" style="position: absolute; width: 210px; height: calc(100vh - 2px) ; image-rendering: pixelated; background-size: 100% 100%; z-index: 999999;overflow: hidden;left:0;
 overflow : scroll;">
-  <div onclick="toggleVS()" style="width:50px; height:50px; background: url('./box (3).png') center center/contain no-repeat; color:yellow; text-align:center; font-size:30px; line-height:30px; position:absolute; left: 10px; top:16px; animation: rainbow 3s infinite;">+</div>
-<div onclick="toggleMENS(); playUpdateSound2()" style="width:50px; height:50px; background: url('./box (3).png') center center/contain no-repeat; color:yellow; text-align:center; font-size:30px; line-height:30px; position:absolute; left: 62px; top:16px; animation: rainbow 3s infinite;" class="nothing" >⚙️</div>
-<div onclick="togglemode1(); playUpdateSound()" style="width:50px; height:50px; background: url('./box (3).png') center center/contain no-repeat; color:yellow; text-align:center; font-size:30px; line-height:30px; position:absolute; left: 114px; top:16px; animation: rainbow 3s infinite;">...</div>
+  <div onclick="toggleVS()" class="enginebox" style="width:50px; height:50px; color:yellow; text-align:center; font-size:30px; line-height:30px; position:absolute; left: 10px; top:16px; animation: rainbow 3s infinite;">+</div>
+<div onclick="toggleMENS(); playUpdateSound2()" class="enginebox" style="width:50px; height:50px;  color:yellow; text-align:center; font-size:30px; line-height:30px; position:absolute; left: 62px; top:16px; animation: rainbow 3s infinite;" class="nothing" >⚙️</div>
+<div onclick="togglemode1(); playUpdateSound()" class="enginebox" style="width:50px; height:50px;   color:yellow; text-align:center; font-size:30px; line-height:30px; position:absolute; left: 114px; top:16px; animation: rainbow 3s infinite;">...</div>
   <div id="Iblocks" style="margin-top:70px; margin-left:20px;padding: 0;"></div>
 </div>
 <style>
@@ -5114,7 +5171,7 @@ function toggleLayers() {
     overflow: hidden;
     overflow: scroll;
 
-    background: url('./box (3).png') no-repeat;
+    background: url('./boxes.png') no-repeat;
     background-size: 100% 100% ;
     background-attachment: fixed;
     background-position:0% 0%;
@@ -5166,7 +5223,16 @@ function toggleLayers() {
 <div onclick="toggleVS(); playUpdateSound3();toggleMENS()"  style="background: deepskyblue">
 Visuals
 </div>
+
+<hr>
+
+<div onclick="EditorMusicPlay('./Dark Loop.mp3')">toggle Play Dark Forest </div>
+<div onclick="EditorMusicPlay('./Mushroom Design.mp3')">toggle Play Mushroom Design </div>
+<div onclick="EditorMusicPlay('./Retro Forest .mp3')">toggle Play Retro Forest</div>
+<hr>
+
 <div style="background: coral" onclick="visibilitytoggle('SoundMaker')">Sound Maker</div>
+
     <div style="background: coral" id="" onclick="hideee()">open drawing editor</div>
 <div   onclick="saveToFile()">SaveToProjectFile</div>
 <div   onclick="saveToFileasJs()">SaveAsFinnalProjectJSfile</div>
@@ -5227,6 +5293,52 @@ bg size:  <t id="sliderValue" style="color:black;">0</t>
   floating background 
 </div>
   <script>
+  var olderaudioinstance=null
+  var toggleff1=0
+function EditorMusicPlay(muscle){
+  toggleff1=toggle(toggleff1)
+  if(toggleff1==1){
+  if (audioInstance) {
+    
+olderaudioinstance=audioInstance
+      audioInstance.pause();
+audioInstance.currentTime = 0;
+audioInstance = null;
+    }
+    
+      
+
+      let base64Wav = muscle;
+
+      audioInstance = new Audio();
+      audioInstance.src = base64Wav;
+      audioInstance.setAttribute('preload', 'auto');
+
+      document.body.appendChild(audioInstance);
+      audioInstance.play();
+      audioInstance.loop = true;
+      toonce = 0;
+    
+}else{
+  audioInstance.pause();
+audioInstance.currentTime = 0;
+audioInstance = null;
+
+  if(olderaudioinstance!==null){
+    var gnk=olderaudioinstance
+    if(gnk.length){
+  let base64Wav = olderaudioinstance;
+
+audioInstance = new Audio();
+audioInstance.src = base64Wav;
+audioInstance.setAttribute('preload', 'auto');
+
+document.body.appendChild(audioInstance);
+audioInstance.play();
+audioInstance.loop = true;
+toonce = 0;
+}}}}
+  
   function stickybg(num) {
     if (!('stickybg1' in config)) {
         config['stickybg1'] = num;
@@ -5277,6 +5389,7 @@ function handleFileContent(textContent) {
 document.getElementById('Econtent').innerHTML=""
 
 config = JSON.parse(textContent);
+
 dimension=config.dimension||0
   try {
     config = JSON.parse(textContent);
@@ -5816,34 +5929,42 @@ window.setInterval(updtd,6000)
 <div>on version 1.1 Experimental</div>
 <button>player take damage</button>
 <input type="file" id="fileInput30" onchange="handleFileInputChangeA(event,config.folder.texture.player,  8)" />
+
+<hr>
+<h2>Player Texture</h2>
+Player Left
 <input type="file" id="fileInput10" onchange="handleFileInputChangeA(event,config.folder.texture.player,  1)" />
-<button onclick="handleFileButtonClickA('fileInput1', 1)">player Left</button>
+Player Right
 <input type="file" id="fileInput20" onchange="handleFileInputChangeA(event,config.folder.texture.player,  2)" />
-<button onclick="handleFileButtonClickA('fileInput2', 2)">player Right</button>
+Stay Right
 <input type="file" id="fileInput60" onchange="handleFileInputChangeA(event,config.folder.texture.player,  4)" />
-<button onclick="handleFileButtonClickA('fileInput2', 4)">player stay Right</button>
+Stay Left
 <input type="file" id="fileInput50" onchange="handleFileInputChangeA(event,config.folder.texture.player,  5)" />
-<button onclick="handleFileButtonClickA('fileInput2', 5)">player stay Left</button>
+Player Jump
 <input type="file" id="fileInput30" onchange="handleFileInputChangeA(event,config.folder.texture.player,  3)" />
-<button onclick="handleFileButtonClickA('fileInput3', 3)">player Jump</button>
+Player Down
 <input type="file" id="fileInput30" onchange="handleFileInputChangeA(event,config.folder.texture.player,  6)" />
-<button onclick="handleFileButtonClickA('fileInput2', 5)">player falldown or Player Top Down Down</button>
+Player Stay Down
 <input type="file" id="fileInput30" onchange="handleFileInputChangeA(event,config.folder.texture.player,  7)" />
-<button onclick="handleFileButtonClickA('fileInput2', 7)">player last click Down</button>
+Player Stay Up
+<input type="file" id="fileInput30" onchange="handleFileInputChangeA(event,config.folder.texture.player,  9)" />
+<br>
+Player Jump sound
 <input type="file" id="fileInput70" onchange="handleFileInputChangeA(event,config.folder.sounds.player,  0)" />
-<button onclick="handleFileButtonClickA('fileInput70', 3)">player Jump Sound</button>
+Player attack sound
 <input type="file" id="fileInput70" onchange="handleFileInputChangeA(event,config.folder.sounds.player,  1)" />
-<button onclick="handleFileButtonClickA('fileInput70', 3)">player attackt Sound</button>
+ Player Hit Sound
 <input type="file" id="fileInput70" onchange="handleFileInputChangeA(event,config.folder.sounds.player,  2)" />
-<button onclick="handleFileButtonClickA('fileInput70', 3)">player hit Sound</button>
+
 <div onclick="config.playershoots=1 ">
   playershoots ? true
 </div>
 <div onclick="config.playershoots=0 ">
   playershoots ? false
 </div>
-<input type="file" id="fileInput40" onchange="handleFileInputChangeA(event,config.folder.texture.projectile,0)" />
 <button onclick="handleFileButtonClickA('fileInput4', 2)">player projectile</button>
+<input type="file" id="fileInput40" onchange="handleFileInputChangeA(event,config.folder.texture.projectile,0)" />
+
 <!-- Input -->
 <div>hp barleft </div>
 <input type="text" id="leftInput" oninput="editInputVariable(this.value, 'left')">
