@@ -11,4 +11,7 @@ https://kashumy.github.io/papermaker3/
 6.  also i will add some bugfixes with collisions if you are really fast 
 
 
-## IMPORTANT: https://github.com/Kashumy/papermaker3/blob/main/IMPORTANT.md
+## IMPORTANT: 
+[![Important Informations](https://raw.githubusercontent.com/Kashumy/assets/main/important.png)](IMPORTANT.md)
+
+
