@@ -1,4 +1,5 @@
- 
+
+
  
 
 <!-- PAPERMAKER 3 free license -->
@@ -567,6 +568,7 @@ function saveToFileasJs() {
                   position: absolute;
                   margin-left: 10%;
                 }
+
 #info{
   position: fixed;
   right:0;
@@ -626,6 +628,7 @@ function saveToFileasJs() {
   <div id="content"></div>
     <div id="Econtent" ></div>
     <div id="Scontent" ></div>
+    <div id="Tcontent" ></div>
 <div id="Dcontent" ></div>
 </div></div>
   <div id="project2">
@@ -810,11 +813,34 @@ if(TILES[i][2]){
 cnt.innerHTML=v
 }
 }}
+let v23=[]
+for (let i=0;i<SPRITES.length;i++){
+let cnt=document.querySelector('#I2blocks')
+if(SPRITES[i][2]){
+  if(SPRITES[i][2]!=='/ NAN.png'){
+ v23 +=`<div style="width: 30px;
+ height: 30px;
+ display: inline-block;
+ outline:1px solid blue;
+ image-rendering: pixelated;
+ background:url('${SPRITES[i][2]}');
+ background-size:100%; color: lightgrey; font-size:6px;
+ " ondblclick="changeTexture(${SPRITES[i][0]})" onclick="build2(${SPRITES[i][0]})">i${SPRITES[i][0]} , S${SPRITES[i][1]}
+</div>`
+cnt.innerHTML=v23
+}
+}}
 },0)
 }
+
 window.setInterval(checki1,3000)
 function build(e){
+buildmap=1
   item=e
+}
+function build2(e) {
+buildmap=0
+  item2 = e
 }
 let selectedTileIndex = null;
 function changeTexture(index) {
@@ -919,6 +945,9 @@ overflow: scroll;
   <button class="a hide2" style="animation: 5s rainbow infinite cubic-bezier(0.19, 1, 0.22, 1); filter: hue-rotate(50deg); filter: sepia(50%);" id="addButton2"> Add normal deco <br></button>
         <input type="file" class="a hide2" accept="image/png, image/gif" id="imageInput5" style="display: none;">
         <button class="a hide2" style="animation: 5s rainbow infinite cubic-bezier(0.19, 1, 0.22, 1);" id="addButton5" style="animation: 5s rainbow infinite ;" >add entity<br></button>
+        <input type="file" class="a hide2" accept="image/png, image/gif" id="imageInput10" style="display: none;">
+<button class="a hide2" style="animation: 5s rainbow infinite cubic-bezier(0.19, 1, 0.22, 1);" id="addButton10" style="animation: 5s rainbow infinite ;" >add special entity <p style="font-size: 7px">it will be rendered outside of viewport</p><br></button> 
+
         <input type="file" class="a hide2" accept="image/png, image/gif" id="imageInput6" style="display: none;">
         <button class="a hide2"  id="addButton6">add Text Element (experiment can doesn't work properly)<br></button>
       <input type="file" class="a hide2"  id="imageInput3" accept="image/png, image/gif" style="display: none;">
@@ -1011,6 +1040,10 @@ var translateY=0;
   <button class="a hide2" style="position: fixed; top:calc(5% + 60px);left:20%;"id="addButton2">add deco <br></button>
         <input type="file" class="a hide2" style="position: absolute; top:calc(5%);left:20%;width: 30px" accept="image/png/gif" id="imageInput5" style="display: none;">
         <button class="a hide2" style="position: fixed; top:calc(5%);left:20%;" id="addButton5">add entity<br></button>
+        
+        <input type="file" class="a hide2" accept="image/png/gif" id="imageInput10" style="display: none;">
+        <button class="a hide2" style="animation: 5s rainbow infinite cubic-bezier(0.19, 1, 0.22, 1);" id="addButton10" style="animation: 5s rainbow infinite ;">add DOM entity <br></button>
+        
         <input type="file" class="a hide2" style="position: absolute; top:calc(70%);left:20%;width: 30px" accept="image/png/gif" id="imageInput6" style="display: none;">
        <button class="a hide2" style="position: fixed; top:calc(70%);left:20%; display:none;" id="addButton6">add projetitle<br></button>
       <input type="file" class="a hide2" style="position: absolute; top:calc(5% + 90px);left:20%;width: 30px"  id="imageInput3" style="display: none;">
@@ -1255,6 +1288,13 @@ const tileCache = {};
 let lastplayerpos = [];
 var dimension = 0;
 var canJUMP=0
+if (!('sprites' in config)) {
+  config['sprites'] = [];
+}
+if (!('spritesmap' in config)) {
+  config['spritesmap'] = [[],[],[]];
+}
+var SPRITES = config.sprites
 
 var TILES = config.blocks;
 var blockstoaddtocollision=[
@@ -1348,6 +1388,62 @@ document.getElementById('sus').style.left = "0px"
 }
 setTimeout(up1,1000)
 
+
+/* RENDERING ALL TILES AT ONCE */
+
+
+/* RENDERING ALL SPRITES AT ONCE */
+function updatePORTEl() {
+  var Eldercontent=document.getElementById('Tcontent')
+    var Spritesdatasheetmap = config.spritesmap;
+    var Spritesdatasheet = config.sprites;
+    /* spritesmap [[[x,y,t],[x,y,t]],[]] */
+    /* [[],[],[]] dimensions */
+    
+    Eldercontent.innerHTML = "";
+    const fragment = document.createDocumentFragment();
+
+    Spritesdatasheetmap[dimension].forEach(sprite => {
+        const [x, y, t] = sprite;
+        const spriteData = Spritesdatasheet.find(data => data[0] === t);
+
+        if (spriteData) {
+            const tile = document.createElement('div');
+             
+           /* if (spriteData[2] == 1) {
+  tile.className = 'tile1 nothing alltiles';
+}else{*/
+            tile.className = `tile alltiles${spriteData[1]} entities sprite${t}`;
+            
+            if(spriteData[1]==4){
+              tile.classList.add('hurtblock')
+            }
+            tile.classList.add('extra_sprites'+spriteData[0]);
+           tile.classList.add('SPRITE')
+            tile.style.backgroundImage = `url("${spriteData[2]}")`;
+            tile.style.left = x * tileSize + 'px';
+            tile.style.top = y * tileSize + 'px';
+            tile.style.width = tileSize + 'px';
+            tile.style.height = tileSize + 'px';
+tile.dataset.x = x;
+tile.dataset.y = y;
+tile.dataset.startx = x;
+tile.dataset.starty = y;
+tile.dataset.s = t;
+            if (spriteData[3]) {
+                tile.style.transform = `scale(${spriteData[3]})`;
+            }
+
+            if (spriteData[4]) {
+                tile.style.zIndex = spriteData[4];
+            }
+
+            fragment.appendChild(tile);
+        }
+    });
+
+    Eldercontent.appendChild(fragment);
+}
 
 /* RENDERING */
 function updateViewport() {
@@ -2028,6 +2124,8 @@ if(config.folder!==undefined){
 if(changedimensionifdeffacted!==undefined&&changedimensionifdeffacted!==null&&changedimensionifdeffacted!==" "){
   dimension=parseInt(changedimensionifdeffacted)
   config.dimension=parseInt(changedimensionifdeffacted)
+  updatePORTEl();
+  updateviewport()
 }
 
 if(spawn_if_killed!==undefined&&spawn_if_killed!==null&&spawn_if_killed!=="undefined"){
@@ -2581,11 +2679,13 @@ if(changeplayerdamage!==undefined&&changeplayerdamage!==null&&changeplayerdamage
   if (randomDimension !== undefined && randomDimension !== null && randomDimension !== "undefined") {
     dimension = parseInt(randomDimension);
     config.dimension = parseInt(randomDimension);
+    updatePORTEl();
     updateViewport();
   }}
 if(collisionchangedimension!==undefined &&collisionchangedimension!==null&&collisionchangedimension!=="undefined"){
   dimension=parseInt(collisionchangedimension)
   config.dimension=parseInt(collisionchangedimension)
+  updatePORTEl();
   updateViewport()
 }
 if(resetkills==1){
@@ -3483,7 +3583,8 @@ function handleFileSelect(event) {
   const fileInput = event.target;
   const files = fileInput.files;
   if (files.length > 0) {
-    const newBlockIndex = TILES.length; 
+    let spritul = config.sprites
+const newBlockIndex = spritul.length + TILES.length;
     const collisionValue = 1;
     const image = event.target.files[0];
     
@@ -3526,7 +3627,8 @@ function handleFileSelect2(event) {
   const fileInput = event.target;
   const files = fileInput.files;
   if (files.length > 0) {
-    const newBlockIndex = TILES.length; 
+    let spritul = config.sprites
+const newBlockIndex = spritul.length + TILES.length;
     const collisionValue = 0;
     const image = event.target.files[0];
 
@@ -3551,7 +3653,8 @@ function handleFileSelect5(event) {
   const fileInput = event.target;
   const files = fileInput.files;
   if (files.length > 0) {
-    const newBlockIndex = TILES.length; 
+    let spritul = config.sprites
+const newBlockIndex = spritul.length + TILES.length;
     const collisionValue = 2;
     const image = event.target.files[0];
   
@@ -3568,6 +3671,42 @@ function handleFileSelect5(event) {
     updateViewport();
   }
 }
+
+
+
+
+document.getElementById('addButton10').addEventListener('touchstart', openFileInput15);
+function openFileInput15() {
+  const fileInput = document.getElementById('imageInput10');
+  fileInput.click();
+}
+
+document.getElementById('imageInput10').addEventListener('change', handleFileSelect15);
+function handleFileSelect15(event) {
+  const fileInput = event.target;
+  const files = fileInput.files;
+  if (files.length > 0) {
+    let spritul=config.sprites
+    const newBlockIndex = spritul.length + TILES.length; 
+    const collisionValue = 2;
+    const image = event.target.files[0];
+  
+    const reader = new FileReader()
+
+    reader.readAsDataURL(image)
+    reader.addEventListener('load', () => {
+      config.sprites.push([newBlockIndex, isentity, reader.result,thistilesize,translateY,1]);
+     // config.sprites.push([TILES.length,1,"/ NAN.png"])
+      setTimeout(function(){
+        entityupd()
+      },1000)
+    })
+    updateViewport();
+  }
+}
+
+
+
 document.getElementById('addButton6').addEventListener('touchstart', openFileInput6);
 function openFileInput6() {
   const fileInput = document.getElementById('imageInput6');
@@ -3579,7 +3718,8 @@ function handleFileSelect6(event) {
   const fileInput = event.target;
   const files = fileInput.files;
   if (files.length > 0) {
-    const newBlockIndex = TILES.length; 
+    let spritul = config.sprites
+const newBlockIndex = spritul.length + TILES.length;
     const collisionValue = -1;
     const image = event.target.files[0];
 
@@ -3605,7 +3745,7 @@ function handleFileSelect3(event) {
   const fileInput = event.target;
   const files = fileInput.files;
   if (files.length > 0) {
-    const newBlockIndex = TILES.length;
+    
     const collisionValue = 1;
     const image = event.target.files[0];
  
@@ -3635,7 +3775,7 @@ function handleFileSelect4(event) {
   const fileInput = event.target;
   const files = fileInput.files;
   if (files.length > 0) {
-    const newBlockIndex = TILES.length; // Get the next iteration
+    
     const collisionValue = 1;
     const image = event.target.files[0];
     // Create file reader object
@@ -4389,6 +4529,10 @@ function loop() {
 }else{
   cantsavebugfix=0
 }
+if (!('sprites' in config)) {
+  config['sprites'] = [];
+}
+SPRITES=config.sprites
   var playerbox=document.getElementById('player')
   var playerlayer=document.getElementById('playerskin')
   playerlayer.style.left=playerbox.style.left
@@ -4732,6 +4876,7 @@ var brushSize = 1;
 let bugfix2=0
 function buildBlock(event) {
 
+if(buildmap==1){
   const rect = content.getBoundingClientRect();
   const x = Math.floor((event.clientX - rect.left) / tileSize2);
   const y = Math.floor((event.clientY - rect.top) / tileSize2);
@@ -4744,6 +4889,13 @@ function buildBlock(event) {
       const currentX = startX + offsetX - 1;
       const currentY = startY + offsetY - 1;
       const existingBlockIndex = tileMap[dimension].findIndex(tile => tile[0] === currentX && tile[1] === currentY);
+      const existingBlockIndex2 = config.spritesmap[dimension].findIndex(tile => tile[0] === currentX && tile[1] === currentY);
+if (layers === 0) {
+  if (existingBlockIndex2 !== -1) {
+    config.spritesmap[dimension].splice(existingBlockIndex2, 1);
+    updatePORTEl();
+}}
+      
       if (layers === 0) {
         if (existingBlockIndex !== -1) {
 //alert("-")
@@ -4771,7 +4923,52 @@ function buildBlock(event) {
   if(config.testmode==0){
   buildBlocksAroundPosition(x, y);
   updateViewport();
-}}
+}}else{
+const rect = content.getBoundingClientRect();
+const x = Math.floor((event.clientX - rect.left) / tileSize2);
+const y = Math.floor((event.clientY - rect.top) / tileSize2);
+// Funkcja do zbudowania bloków w obszarze o określonym rozmiarze
+// alert(TILES[item][0])
+function buildBlocksAroundPosition(startX, startY) {
+  if (config.testmode == 0) {
+    for (let offsetX = -brushSize + 2; offsetX <= brushSize; offsetX++) {
+      for (let offsetY = -brushSize + 2; offsetY <= brushSize; offsetY++) {
+        const currentX = startX + offsetX - 1;
+        const currentY = startY + offsetY - 1;
+        const existingBlockIndex = config.spritesmap[dimension].findIndex(tile => tile[0] === currentX && tile[1] === currentY);
+        if (layers === 0) {
+          if (existingBlockIndex !== -1) {
+            //alert("-")
+            config.spritesmap[dimension].splice(existingBlockIndex, 1);
+            updatePORTEl();
+            return;
+          } else {
+
+            config.spritesmap[dimension].push([currentX, currentY, item2]);
+            //  newtilemap[dimension].push([currentX, currentY, item]); 
+          }
+        } else {
+
+          config.spritesmap[dimension].push([currentX, currentY, item2]);
+          //  newtilemap[dimension].push([currentX, currentY, item]); 
+        }
+       // config.savedTileMap = tileMap;
+        // alert("")
+      }
+    }
+
+    updatePORTEl();
+  }
+}
+
+if (config.testmode == 0) {
+  buildBlocksAroundPosition(x, y);
+  updateViewport();
+}
+}
+  
+  
+}
 /*
 dld()
 function dld(){
@@ -4881,6 +5078,7 @@ overflow : scroll;">
 <div onclick="toggleMENS(); playUpdateSound2()" class="enginebox" style="width:50px; height:50px;  color:yellow; text-align:center; font-size:30px; line-height:30px; position:absolute; left: 62px; top:16px; animation: rainbow 3s infinite;" class="nothing" >⚙️</div>
 <div onclick="togglemode1(); playUpdateSound()" class="enginebox" style="width:50px; height:50px;   color:yellow; text-align:center; font-size:30px; line-height:30px; position:absolute; left: 114px; top:16px; animation: rainbow 3s infinite;">...</div>
   <div id="Iblocks" style="margin-top:70px; margin-left:20px;padding: 0;"></div>
+  <div id="I2blocks" style="margin-top:0px; margin-left:20px;padding: 0;"></div>
 </div>
 <style>
   .btn{
@@ -5101,7 +5299,10 @@ but update will come with others options :) </details>
   <div id="sub123" class="box0" onclick="sub123()"   >-</div>
 </div>
 <script>
-  var item=1;function add123(){ if(item > -1 ){ item ++ ; updt()}}function sub123(){if(item > 0 ){ item -- ; updt()}}function updt(){document.getElementById('value123').innerText=item}
+  var item=1;
+  var buildmap=1
+  var item2=1
+  function add123(){ if(item > -1 ){ item ++ ; updt()}}function sub123(){if(item > 0 ){ item -- ; updt()}}function updt(){document.getElementById('value123').innerText=item}
 </script>
 <!-- dimensions -->
 <style>
@@ -5121,7 +5322,7 @@ but update will come with others options :) </details>
   <div class="box0" onclick="sub1232()"   >-</div>
 </div>
 <script>
-  function add1232(){ if(dimension > -1 ){ dimension ++ ; updt2()}}function sub1232(){if(dimension > 0 ){ dimension -- ; updt2()}}function updt2(){document.getElementById('value1232').innerText=dimension; updateViewport()}
+  function add1232(){ if(dimension > -1 ){ dimension ++ ; updt2()}}function sub1232(){if(dimension > 0 ){ dimension -- ; updt2()}}function updt2(){document.getElementById('value1232').innerText=dimension; updateViewport();updatePORTEl();}
 </script>
 <!-- brushSize -->
 <style>
@@ -5219,6 +5420,8 @@ function toggleLayers() {
 <pre style="white-space: pre-wrap" class="mn">
   <h3>Menu</h3>
 <hr>
+<div onclick="alert(JSON.stringify(config.spritesmap))" style="animation: 5s rainbow infinite cubic-bezier(0.19, 1, 0.22, 1);" style="background: yellow">check spritesmap
+</div>
 <div onclick="visibility('.menu2-content'); toggleMENS()" style="animation: 5s rainbow infinite cubic-bezier(0.19, 1, 0.22, 1);" style="background: yellow">Code
 </div>
 <div onclick="visibility('.menu-content'); playUpdateSound3();toggleMENS()"  style="background: red">
@@ -5540,6 +5743,7 @@ document.querySelector('#content2').style.height = vp.style.height
 document.querySelector('#content2').style.zoom = vp.style.zoom
 setTimeout(edit,5000)
     //alert((config));
+    updatePORTEl()
   } catch (error) {
     console.error("Błąd podczas parsowania pliku JSON:", error);
   }
@@ -5557,8 +5761,10 @@ if(config.debugmode==1){
 topdownbuttonsexmp()
 document.querySelector('.player').style.background = `url('/debug.png')`
 updateViewport();
+
 document.querySelector('.player').style.background=`url("${config.playerskin1}");`;
 }
+updatePORTEl()
 },3000)
   </script>
 <!--  <input type="range" id="mySlider2" min="-10" max="10" value="0">
@@ -6147,6 +6353,7 @@ function emptyproj(){
   gravity=0
   document.querySelector('#Econtent').innerHTML=""
   document.querySelector('#Iblocks').innerHTML=""
+  document.querySelector('#I2blocks').innerHTML=""
   updateViewport()
 }
 
