@@ -1,4 +1,4 @@
- 
+
  
 
 <!-- PAPERMAKER 3 free license -->
@@ -799,7 +799,7 @@ setTimeout(function (){
 for (let i=0;i<TILES.length;i++){
 let cnt=document.querySelector('#Iblocks')
 if(TILES[i][2]){
-  if(TILES[i][2]!=='/ NAN.png'){
+ if(TILES[i][2]!=='/ NAN.png'){
  v +=`<div style="width: 30px;
  height: 30px;
  display: inline-block;
@@ -1026,7 +1026,7 @@ if (elemento in config.entities) {
 }
 function entityupd(){
   let entityName=isentity
-  let testexample2={"examples":{"alltiles0":[2,"move , follow , avoid",0,3,0,1,[0,0,999999,999999],true,"[[0,0],[0,0]]",0,1,0,"player"]}}
+  let testexample2={"examples":{"alltiles0":[2,"follow,move,avoid",0,3,0,1,[0,0,999999,999999],true,"[[0,0],[0,0]]",0,1,0,"player",,,,,,,1]}}
   if (entityName) {
   const entityId = parseInt(entityName);
   const entityKey = "alltiles" + entityId;
@@ -3658,7 +3658,7 @@ const newBlockIndex = spritul.length + TILES.length+1;
     reader.readAsDataURL(image)
     reader.addEventListener('load', () => {
           TILES.push([newBlockIndex, collisionValue, reader.result,thistilesize,translateY]);
-          TILES.push([TILES.length,1,"/ NAN.png"])
+          TILES.push([newBlockIndex+1,1,"/ NAN.png"])
           checki1()
     })
     updateViewport();
@@ -3703,7 +3703,7 @@ const newBlockIndex = spritul.length + TILES.length+1;
     reader.readAsDataURL(image)
     reader.addEventListener('load', () => {
       TILES.push([newBlockIndex, collisionValue, reader.result,thistilesize,translateY]);
-      TILES.push([TILES.length,1,"/ NAN.png"])
+      TILES.push([newBlockIndex+1,1,"/ NAN.png"])
       checki1()
     })
     updateViewport();
@@ -3730,7 +3730,7 @@ const newBlockIndex = spritul.length + TILES.length+1;
     reader.readAsDataURL(image)
     reader.addEventListener('load', () => {
       TILES.push([newBlockIndex, isentity, reader.result,thistilesize,translateY]);
-      TILES.push([TILES.length,1,"/ NAN.png"])
+      TILES.push([newBlockIndex+1,1,"/ NAN.png"])
       checki1()
       setTimeout(function(){
         entityupd()
@@ -3798,7 +3798,7 @@ const newBlockIndex = spritul.length + TILES.length+1;
       TILES.push([newBlockIndex, collisionValue, reader.result,thistilesize,translateY]);
       //alert(TILES[newBlockIndex])
       
-      TILES.push([TILES.length,1,"/ NAN.png"])
+      TILES.push([newBlockIndex+1,1,"/ NAN.png"]);
       checki1()
     })
     updateViewport();
@@ -5916,7 +5916,7 @@ slider2.addEventListener('touchend', () => {stop=1; slider2.value = 0; currentVa
 </style>
 <script>
 
-var testexample={"examples":{"alltiles0":[2,"move",0,3,0,1,[0,0,999999,999999],true,"[[0,0],[0,0]]",0,1,0,"player"]}}
+var testexample={"examples":{"alltiles0":[2,"move",0,3,0,1,[0,0,999999,999999],true,"[[0,0],[0,0]]",0,1,0,"player",,,,,,,1]}}
 
     function displayEntities() {
         const container = document.getElementById('entities-container');
@@ -9373,3 +9373,4 @@ l
 <document id="HTMLADDCODE">
   
 </document>
+ 
