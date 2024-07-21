@@ -1,5 +1,4 @@
-
-
+ 
  
 
 <!-- PAPERMAKER 3 free license -->
@@ -104,20 +103,17 @@ function toggle(value) {
   const textsArray = [
 `
 <div style=' color: rgb(100,250,240);  height:90vh; width:90vw'> 
-just a pme 3+ experimental edition </div>
+just a pme 3.5+ experimental edition </div>
 `,`
 <div style=' color: rgb(100,250,240);  height:90vh; width:90vw'>
-  fixed:
-  
-- some bugs 
-- you can now fully edit textures animation of a player
-- jumping , bugs
-  todo:
-  
-- add JavaScript editor+ to add code that execute JavaScript 
-- add object inspection that show classes position styles of every element on the page and JavaScript elements and variables function inspection and code inspection 
-- fix bug with movetilesrandomly() if you killed something always move tiles if it is anabled
-- do not disconnect domain
+  in this version:
+- WoW now game has 1/2 lags less :) 
+- added shader (antianalising),(antianalising_toviewport+)
+- bug fixed 
+ errors funded:
+ - collision bug with block size 1.5 near other block underneath and more collisions error (add time undo if you are inside)
+ - SPRITES is new Thing and it is on some aspect buggy
+
   </div>
 `];
 
@@ -282,6 +278,7 @@ mbs.innerHTML = speed+'mb/s'
     }
 });
 </script>
+
 <script>
   var sizescale=config.tilesize;
 </script>
@@ -430,7 +427,7 @@ function chooseFile() {
   var cantsavebugfix=1
     function saveToFile() {
       if(isonfloor==1||cantsavebugfix==0){
-config.blocks.push([TILES.length,1,"/ NAN.png"])
+config.blocks.push([TILES.length+(config.sprites).length,1,"/ NAN.png"])
 config.code = code;
 config.debugmode=0
 config.testmode=0
@@ -448,7 +445,7 @@ let code2=JSON.stringify(config)
       a.click();
     }}
 function saveToFileasJs() {
-  config.blocks.push([TILES.length, 1, "/ NAN.png"])
+  config.blocks.push([TILES.length+(config.sprites).length, 1, "/ NAN.png"])
   config.code = code;
   config.debugmode = 0
   config.testmode = 0
@@ -767,7 +764,7 @@ config.zoom=initialZoom * scaleFactor * 0.5;
   }
 </style>
 <html onclick="setTimeout(function(){document.documentElement.requestFullscreen()},200)">
-  <audio id="audio" src="./stray_22 - Rikonium.mp3"></audio>
+  <audio id="audio" src=""></audio>
 
 <title></title>
 
@@ -798,6 +795,7 @@ function checki1(){
   }
 setTimeout(function (){
   let v=[]
+  
 for (let i=0;i<TILES.length;i++){
 let cnt=document.querySelector('#Iblocks')
 if(TILES[i][2]){
@@ -808,7 +806,7 @@ if(TILES[i][2]){
  image-rendering: pixelated;
  background:url('${TILES[i][2]}');
  background-size:100%; color: lightgrey; font-size:6px;
- " ondblclick="changeTexture(${TILES[i][0]})" onclick="build(${TILES[i][0]})">i${TILES[i][0]} , S${TILES[i][1]}
+ " ondblclick="changeTexture('${TILES[i][2]}')" onclick="build(${TILES[i][0]})">i${TILES[i][0]} , S${TILES[i][1]}
 </div>`
 cnt.innerHTML=v
 }
@@ -825,15 +823,17 @@ if(SPRITES[i][2]){
  image-rendering: pixelated;
  background:url('${SPRITES[i][2]}');
  background-size:100%; color: lightgrey; font-size:6px;
- " ondblclick="changeTexture(${SPRITES[i][0]})" onclick="build2(${SPRITES[i][0]})">i${SPRITES[i][0]} , S${SPRITES[i][1]}
+ "  ondblclick="changeTexture2('${TILES[i][2]}')" onclick="build2(${SPRITES[i][0]})">i${SPRITES[i][0]} , S${SPRITES[i][1]}
 </div>`
 cnt.innerHTML=v23
 }
 }}
 },0)
 }
-
-window.setInterval(checki1,3000)
+setTimeout(function(){
+  checki1()
+},2000)
+//window.setInterval(checki1,3000)
 function build(e){
 buildmap=1
   item=e
@@ -843,7 +843,7 @@ buildmap=0
   item2 = e
 }
 let selectedTileIndex = null;
-function changeTexture(index) {
+function changeTexture(textureBase64) {
     const fileInput = document.createElement('input');
     fileInput.type = 'file';
     fileInput.accept= "image/png"
@@ -858,13 +858,49 @@ function changeTexture(index) {
 
             reader.readAsDataURL(image)
             reader.addEventListener('load', () => {
+//const newTextureBase64 = reader.result; 
+for (let i = 0; i < TILES.length; i++) {
 
-                TILES[index][2] = reader.result;
+  if (TILES[i][2] === textureBase64) {
+    TILES[i][2] = reader.result;
+  }
+}
+                checki1()
                 updateViewport();
             })
         }
     });
     fileInput.click();
+}
+function changeTexture2(textureBase64) {
+  const fileInput = document.createElement('input');
+  fileInput.type = 'file';
+  fileInput.accept = "image/png"
+  fileInput.addEventListener('change', (event) => {
+    const files = event.target.files;
+    if (files.length > 0) {
+      const newBlockIndex = SPRITES.length;
+      const collisionValue = 1;
+      const image = event.target.files[0];
+
+      const reader = new FileReader()
+
+      reader.readAsDataURL(image)
+      reader.addEventListener('load', () => {
+        //const newTextureBase64 = reader.result; 
+        for (let i = 0; i < SPRITES.length; i++) {
+
+          if (SPRITES[i][2] === textureBase64) {
+            SPRITES[i][2] = reader.result;
+          }
+        }
+        checki1()
+        updateViewport();
+        config.sprites=SPRITES
+      })
+    }
+  });
+  fileInput.click();
 }
 </script>
 <style>
@@ -925,7 +961,7 @@ overflow: scroll;
 overflow: scroll;
     padding: 10px;
   }#ICON{
-    image-rendering: pixelated
+   //image-rendering: pixelated
   }
 </style>
 </head>
@@ -935,7 +971,7 @@ overflow: scroll;
     x
   </div>
   <div class="tile-info">
-    <img src="/watermark.gif" id="ICON" alt="Ikona kafelka">
+    <img src="/watermark.gif" id="ICON" alt="">
   </div>
   <div class="tile-details">
     <h2 style="animation: 5s rainbow infinite cubic-bezier(0.19, 1, 0.22, 1);" >Make Sprite</h2>
@@ -1132,7 +1168,7 @@ background: #42445A;
 background-size: 200%;
 transform: var(--after-transform);
 
-image-rendering: pixelated;
+//image-rendering: pixelated;
 }
 
 #fps{
@@ -1178,9 +1214,10 @@ position: fixed;
   top:50%;
   left:50%;
   position :absolute ;
+  
 }
 #content2 {
-image-rendering: pixelated;
+//image-rendering: pixelated;
   overflow: auto;
   transform: translate(-50%, -50%);
   top: 50%;
@@ -1190,18 +1227,20 @@ background-size: 100%;
 }
 #content {
   position: relative;
-  image-rendering: pixelated;
+ //image-rendering: pixelated;
 }
 #content2 {
-  image-rendering: pixelated;
+ //image-rendering: pixelated;
 }
 .tile {
   position: absolute;
   background-size: 32px;
   box-sizing: border-box;
+  
 }
 .nothing {
-  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAK0lEQVQYGWNkYGD4D8Rw8J9hCpwNYjCh8LBwKFfAgm4nI0MOikWUW0HQBACOVgSkom3uKAAAAABJRU5ErkJggg=="); image-rendering: pixelated;
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAK0lEQVQYGWNkYGD4D8Rw8J9hCpwNYjCh8LBwKFfAgm4nI0MOikWUW0HQBACOVgSkom3uKAAAAABJRU5ErkJggg==");
+  //image-rendering: pixelated;
   background-size: 100%;
 }
 .tile1 {
@@ -1232,7 +1271,7 @@ background-size: 100%;
   background-size: cover;
   background-position: center center; 
 width: 10%;
-image-rendering: pixelated;
+//image-rendering: pixelated;
 height: 10%
 }
 </style>
@@ -1955,6 +1994,9 @@ ifvariablekillthiswhencollision,
 ifvariablekillthiswhenshown,
 regenerateplayerpos,
 removefroviewpirtifoutside,
+weird3dblockwall,
+hideshowplayer,
+customhitboxplayercollision,
 BLOCKTYPE
 
 
@@ -2229,6 +2271,15 @@ if(despawn!==undefined&&despawnMS!==undefined||cantbedamaged!==1){
     const viewport = document.getElementById('viewport');
               let left = parseFloat(tile.style.left) || 0;
               let top = parseFloat(tile.style.top) || 0;
+              if(!isNaN(parseFloat(tile.style.height))&&tile.style.height){
+              let rdheight = (parseFloat(tile.style.height)/4) ;}
+if (weird3dblockwall == null&&weird3dblockwall == undefined &&weird3dblockwall) {
+  if (parseFloat(player.style.top) > top+rdheight){
+    tile.style.zIndex="0"
+  }else{
+    tile.style.zIndex="10"
+  }
+}
 if (randomteleporting!==undefined&&randomteleporting!==null&&randomteleporting!==""&&randomteleporting!=="undefined") {
   if(!tile.dataset.teleporting){
 tile.dataset.teleporting=1
@@ -2568,6 +2619,9 @@ if(anableshootingattackforentities==1){
                     // Change tile class to avoid collision
                     tile.classList.remove('tile');
                     tile.classList.add('tile1');
+                   /* if(customhitboxplayercollision!==undefined&&customhitboxplayercollision!==null &&customhitboxplayercollision){
+                    tile.dataset.collisionsize= parseFloat(customhitboxplayercollision)
+                    }*/
                 }
                 let distanceToProjectile=20
                 if(anableshootingattackforentities==1){
@@ -2634,7 +2688,18 @@ if(oldGravity!==null&&oldGravity!==undefined&&distanceToPlayer > dist&&distanceT
   gravity=oldGravity
   console.log(oldGravity)
 }
+if(customhitboxplayercollision!==undefined&&customhitboxplayercollision!==null&&customhitboxplayercollision){
+  dist=customhitboxplayercollision
+}
                 if(distanceToPlayer <= dist ){
+                  
+                  
+if( hideshowplayer==1){
+  document.getElementById('playerskin').style.opacity="1"
+}
+if (hideshowplayer == 0) {
+  document.getElementById('playerskin').style.opacity = "0"
+}
                   if(collisionEVAL!==null&&collisionEVAL!==undefined&&collisionEVAL){
 eval(collisionEVAL)
                   }
@@ -3584,7 +3649,7 @@ function handleFileSelect(event) {
   const files = fileInput.files;
   if (files.length > 0) {
     let spritul = config.sprites
-const newBlockIndex = spritul.length + TILES.length;
+const newBlockIndex = spritul.length + TILES.length+1;
     const collisionValue = 1;
     const image = event.target.files[0];
     
@@ -3594,6 +3659,7 @@ const newBlockIndex = spritul.length + TILES.length;
     reader.addEventListener('load', () => {
           TILES.push([newBlockIndex, collisionValue, reader.result,thistilesize,translateY]);
           TILES.push([TILES.length,1,"/ NAN.png"])
+          checki1()
     })
     updateViewport();
   }
@@ -3628,7 +3694,7 @@ function handleFileSelect2(event) {
   const files = fileInput.files;
   if (files.length > 0) {
     let spritul = config.sprites
-const newBlockIndex = spritul.length + TILES.length;
+const newBlockIndex = spritul.length + TILES.length+1;
     const collisionValue = 0;
     const image = event.target.files[0];
 
@@ -3638,6 +3704,7 @@ const newBlockIndex = spritul.length + TILES.length;
     reader.addEventListener('load', () => {
       TILES.push([newBlockIndex, collisionValue, reader.result,thistilesize,translateY]);
       TILES.push([TILES.length,1,"/ NAN.png"])
+      checki1()
     })
     updateViewport();
   }
@@ -3654,7 +3721,7 @@ function handleFileSelect5(event) {
   const files = fileInput.files;
   if (files.length > 0) {
     let spritul = config.sprites
-const newBlockIndex = spritul.length + TILES.length;
+const newBlockIndex = spritul.length + TILES.length+1;
     const collisionValue = 2;
     const image = event.target.files[0];
   
@@ -3664,6 +3731,7 @@ const newBlockIndex = spritul.length + TILES.length;
     reader.addEventListener('load', () => {
       TILES.push([newBlockIndex, isentity, reader.result,thistilesize,translateY]);
       TILES.push([TILES.length,1,"/ NAN.png"])
+      checki1()
       setTimeout(function(){
         entityupd()
       },1000)
@@ -3687,7 +3755,7 @@ function handleFileSelect15(event) {
   const files = fileInput.files;
   if (files.length > 0) {
     let spritul=config.sprites
-    const newBlockIndex = spritul.length + TILES.length; 
+    const newBlockIndex = spritul.length + TILES.length+1; 
     const collisionValue = 2;
     const image = event.target.files[0];
   
@@ -3696,7 +3764,8 @@ function handleFileSelect15(event) {
     reader.readAsDataURL(image)
     reader.addEventListener('load', () => {
       config.sprites.push([newBlockIndex, isentity, reader.result,thistilesize,translateY,1]);
-     // config.sprites.push([TILES.length,1,"/ NAN.png"])
+      config.sprites.push([newBlockIndex+1,1,"/ NAN.png"])
+     checki1()
       setTimeout(function(){
         entityupd()
       },1000)
@@ -3719,7 +3788,7 @@ function handleFileSelect6(event) {
   const files = fileInput.files;
   if (files.length > 0) {
     let spritul = config.sprites
-const newBlockIndex = spritul.length + TILES.length;
+const newBlockIndex = spritul.length + TILES.length+1;
     const collisionValue = -1;
     const image = event.target.files[0];
 
@@ -3728,7 +3797,9 @@ const newBlockIndex = spritul.length + TILES.length;
     reader.addEventListener('load', () => {
       TILES.push([newBlockIndex, collisionValue, reader.result,thistilesize,translateY]);
       //alert(TILES[newBlockIndex])
+      
       TILES.push([TILES.length,1,"/ NAN.png"])
+      checki1()
     })
     updateViewport();
   }
@@ -3830,7 +3901,7 @@ var gravity=config.gravity;
     var x=0
     var y=0
     var speed=config.speed
-    var ostclick;
+    var ostclick="down";
   function movright(){
     movePlayer(-0.08*speed,0)
     if(config.debugmode==1){
@@ -4225,11 +4296,20 @@ if(by4<3){
     isScrolling = false;
   
   }
-  
-  playerX += dx;
-  thiy=dy;
-  thix=dx;
-  playerY += dy;
+  if(config.newengine4==1){
+  for (var i = 0; i <= speed; i++) {
+playerX += dx / speed;
+thiy = dy / speed;
+thix = dx / speed;
+playerY += dy / speed;
+collision()
+  }}else{
+    playerX += dx ;
+thiy = dy ;
+thix = dx ;
+playerY += dy ;
+
+  }
   
   document.getElementById('console').innerHTML ='x:'+ Math.round(playerX*100)/100 +' &nbsp &nbsp &nbsp y:'+Math.round(playerY*100)/100
 
@@ -4406,32 +4486,25 @@ var collidingjump2=0
           const rect1 = player.getBoundingClientRect();
           const rect2 = tile.getBoundingClientRect();
           const wallThickness = 2;
-       /*   
-          if (rect1.bottom > rect2.top + 5 &&
-            rect1.top < rect2.bottom - 10 &&
-            rect1.right + 5 > rect2.left + 5 &&
-            rect1.left < rect2.right - 5) {
-            //  cofnijczas(2)
-           // console.log("oh")
-        //    collision()
-        //    VelocityY = -0.01;
-            Centercol = 1;
-            topside = 0;
-         /*   playerY -= 0.6;*/
-         //   playerX -= 0.1;
- /*        speed=config.backspeed
-         setTimeout(normspeed,1000)
-          } else {
-            Centercol = 0
-          }*/
-          if (rect1.top < rect2.bottom + 3 && rect1.bottom > rect2.bottom + 3 && rect1.right > rect2.left && rect1.left < rect2.right) {
+          if(false){
+            
+            
+
+
+
+
+
+          }else{
+
+          if (rect1.top < rect2.bottom + 3 && rect1.bottom > rect2.bottom + 5 && rect1.right > rect2.left && rect1.left < rect2.right) {
             playerY +=power * speed;
             player.style.top = playerY * tileSize + 'px';
         //    collide = 1
         speed=config.backspeed
             setTimeout(normspeed,1000)
           }
-          if (rect1.left < rect2.right+4  && rect1.right > rect2.right && rect1.bottom > rect2.top  && rect1.top < rect2.bottom ) {
+          if (rect1.left < rect2.right+4  && rect1.right > rect2.right && rect1.bottom > rect2.top &&
+  rect1.top < rect2.bottom - 2) {
             playerX += power*speed*1.19;
             player.style.left = playerX * tileSize + 'px';
             player.style.top = playerY * tileSize + 'px';
@@ -4443,7 +4516,7 @@ var collidingjump2=0
               rect1.right > rect2.left - 3 &&
               rect1.left < rect2.left &&
               rect1.bottom > rect2.top &&
-              rect1.top < rect2.bottom
+              rect1.top < rect2.bottom-2
             ) {
 
             playerX -= power * speed * 1.19;
@@ -4509,7 +4582,7 @@ setTimeout(normspeed,1000)
           } else {
             collide = 0;
           }
-        }}
+        }}}
       }}
 function h(){
 }
@@ -4529,11 +4602,37 @@ function loop() {
 }else{
   cantsavebugfix=0
 }
+if (!('renderertype' in config)) {
+  config['renderertype'] = 1;
+}
+if(config.renderertype==1){
+  // antianalising 
+  document.getElementById('viewport').style.imageRendering="pixelated"
+}else{
+  document.getElementById('viewport').style.imageRendering=""
+}
 if (!('sprites' in config)) {
   config['sprites'] = [];
 }
+if (!('spritesmap' in config)) {
+  config['spritesmap'] = [[], [], [], [],[]];
+}
+if (!('HTML5' in config)) {
+  config['HTML5'] = " ";
+}
+if(document.getElementById("HTMLADDCODE")){
+if(document.getElementById("HTMLADDCODE").innerHTML!==config.HTML5){
+document.getElementById("HTMLADDCODE").innerHTML=config.HTML5 
+}}
+if (!('newengine4' in config)) {
+  config['newengine4'] = 0;
+}
 SPRITES=config.sprites
   var playerbox=document.getElementById('player')
+  if (playerskin) {
+  playerbox.style.background = `url(${playerskin})`
+  playerbox.style.backgroundImage=`url(${playerskin})`
+}
   var playerlayer=document.getElementById('playerskin')
   playerlayer.style.left=playerbox.style.left
   playerlayer.style.top=playerbox.style.top
@@ -4728,6 +4827,7 @@ document.addEventListener('keyup', function(event) {
         document.querySelector('.player').style.background = `url(${playerskin})`
       }
     }
+    
     if(ostclick=="right"){
       if(config.v>0&&config.v){
       if(config.folder){
@@ -4904,6 +5004,7 @@ if (layers === 0) {
         } else {
 
           tileMap[dimension].push([currentX, currentY, item]); 
+        //  alert(item)
         //  newtilemap[dimension].push([currentX, currentY, item]); 
         }
       } else {
@@ -5420,7 +5521,9 @@ function toggleLayers() {
 <pre style="white-space: pre-wrap" class="mn">
   <h3>Menu</h3>
 <hr>
-<div onclick="alert(JSON.stringify(config.spritesmap))" style="animation: 5s rainbow infinite cubic-bezier(0.19, 1, 0.22, 1);" style="background: yellow">check spritesmap
+
+
+<div onclick="toggleHTMLEDITOR()" style="animation: 5s rainbow infinite cubic-bezier(0.19, 1, 0.22, 1);" style="background: yellow">newHTML5 CODE
 </div>
 <div onclick="visibility('.menu2-content'); toggleMENS()" style="animation: 5s rainbow infinite cubic-bezier(0.19, 1, 0.22, 1);" style="background: yellow">Code
 </div>
@@ -5452,12 +5555,15 @@ Close Menu
 <div onclick="editor ='right';up1()" style="background: deepskyblue">
   Editor right
 </div>
-<div onclick="config.savedTileMap.push([]);tileMap.push([])" style="background:wheat">
-  + Add dimension
+<div onclick="config.savedTileMap.push([]);tileMap.push([]); config.spritesmap.push([]); alert(config.spritesmap.length+' '+config.savedTileMap+' '+tileMap)" style="background:wheat">
+  + Add dimension + add sprites Dimension 
+  
 </div>
 <div onclick="config.roommode=2">Room scroller</div>
 <div onclick="config.roommode=1">Closer sidescroller</div>
 <div onclick="config.roommode=0">Normal sidescroller</div>
+<div onclick="config.renderertype=1">antianalising</div>
+<div onclick="config.renderertype=0">smoothing</div>
 <div onclick="handleFileContent(JSON.stringify(example2));toggleMENS()">
   load example platformer game
 </div>
@@ -5495,6 +5601,13 @@ bg size:  <t id="sliderValue" style="color:black;">0</t>
 </div>
 <div onclick="stickybg(0);">
   floating background 
+</div>
+
+<div onclick="config.newengine4=1;">
+  config newengine4 (1) do not use it
+</div>
+<div onclick="config.newengine4=0;">
+  config newengine4 (0)
 </div>
   <script>
   var olderaudioinstance=null
@@ -5580,6 +5693,7 @@ input.accept=`${specialname2}`
         let textContent = e.target.result;
 
         handleFileContent(textContent);
+        
       };
       reader.readAsText(file);
     }
@@ -5711,7 +5825,7 @@ if (config.oldmusic.slice(0, 10) !== config.oldmusic) {
     document.getElementById('Scontent').innerHTML=''
     document.getElementById('Econtent').innerHTML=''
     tileConfig = config.entities
-
+checki1()
     moveTilesRandomly()
     setTimeout(function(){
       curline=0
@@ -6010,8 +6124,10 @@ if (file) {
 "resetkills 1/0 collision ",
 "if collision and entity exist on viewport attack this < S > give cant be damaged and 1 hp for better experience",
 "if collision with other entity attack this < S >",
-"addotherclasses ['class']  projetitle is special class it used for all hurtable with anableshootingattackforentities sprites for kiling it ",
-"collisionchangedimension (number of dimension)",
+`ddotherclasses ["class","nextclass"]  projetitle is special class it used for all hurtable with anableshootingattackforentities sprites for kiling it `,
+
+"<p style='color: red' >collisionchangedimension (number of dimension)</p>",
+
 "lookatobject1/0",
 "spawningdistance", //number
 "spawningoffset [x,y]", //[x,y]
@@ -6020,9 +6136,9 @@ if (file) {
 "distance collision player (number def 1)",
 "deal damage player (num def 1) ",
 "changeplayerdamage on collision (number def 1)",
-"🆕<p style='animation: 5s rainbow infinite; filter:sepia(50%);' >Spawn3without Spawn distance spawning inside [duration,i..] </p>",
-"T:🆕 <p style='animation: 5s rainbow infinite; filter:sepia(50%);' >drop a music loop will be played if dialogue ends </p>",
-"🆕<p style='animation: 5s rainbow infinite; filter:sepia(50%);' >changedimensionifdeffacted (number) </p>",
+"<p style='animation: 5s rainbow infinite; filter:sepia(50%);' >Spawn3without Spawn distance spawning inside [duration,i..] </p>",
+"T: <p style='animation: 5s rainbow infinite; filter:sepia(50%);' >drop a music loop will be played if dialogue ends </p>",
+"<p style='animation: 5s rainbow infinite; filter:sepia(50%);' >changedimensionifdeffacted (number) </p>",
 "collisionchangerandomdimension [min ,max]",
 "disabled - use index instead whenkilledspawnSprite (S...)",
 "T: dialiguesounds", //+stop
@@ -6032,8 +6148,11 @@ if (file) {
 "<p style='color:lime' >delete If it is outside of viewport also need virtualization anabled ( enter 1/0 good for blocks )</p>",
 
 "<p style='animation: 5s rainbow infinite; filter:sepia(50%);' >Interesting: </p> Block Type: 'float','ladder','water'  (enter) ",
+"Weird 3D block if player on bottom this ZIndex=1 else ZIndex=10 (1/0)",
+"Hide(0)/Show(1) 'player' (else do nothing)",
+"CUSTOM EVENT COLLISION DISTANCE < def=1 full block",
 
-"<p style='animation: 5s rainbow infinite;'>3.0[nafu] not a finnal update  50% of this instructions configuration are not understandable for a human :P  </p>",
+`<p style='animation: 5s rainbow infinite;'>3.0[nafu] not a finnal update  50% of this instructions configuration are not understandable for a human :P  <br><br> IMPORTANT : do not use ' use instead " make JSON OBJECT '[]' like this :["variable",1,"="] <br> type :null <br> to disable option</p>`,
 /*
 playertextureleft,
 playertextureright,
@@ -6440,6 +6559,12 @@ function toggleVS() {
  for(i=0; i<p.length; i++){
    p[i].classList.toggle('hide2')
  }
+}
+function toggleHTMLEDITOR(){
+  var p = document.querySelectorAll('.containerC')
+for (i = 0; i < p.length; i++) {
+  p[i].classList.toggle('hide')
+}
 }
 </script>
 <!DOCTYPE html>
@@ -8793,8 +8918,9 @@ config.spawnY=config.spawnY+0.9
     margin-top: 7px;
     width: 220px;
     height: 220px;
-    background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAA1JREFUGFdjePfu3X8ACWIDyvrS0aMAAAAASUVORK5CYII=');
+    background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAA1JREFUGFdjePfu3X8ACWIDyvrS0aMAAAAASUVORK5CYII=');#42445A
     image-rendering: pixelated;
+    
   }
 
   #controlsdrw {
@@ -9213,3 +9339,37 @@ easing :
 
 
 </SoundMaker>
+
+
+<div class='hide containerC'
+style="
+position: fixed;
+
+z-index:999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999;
+top: 0;
+left: 0;
+width: 100vw;
+height: 100vh;
+background-color: black;
+
+color: white;
+opacity: 1;
+transition: opacity 2s ease-in-out;"
+  >
+  <div style="width: 20px; height:20px; background:red; position:absolute ; top:0; right:0;" onclick="toggleHTMLEDITOR()">
+x
+  </div>
+    <div style="width: 20px; height:20px; background:blue; position:absolute ; top:0; right:20px;" onclick='config.HTML5=document.getElementById("HTMLCODE").value'>
+s
+  </div>
+      <div style="width: 20px; height:20px; background:orange; position:absolute ; top:0; right:40px;" onclick='document.getElementById("HTMLCODE").value==config.HTML5'>
+l
+    </div>
+  <textarea  style="width:100vw; height:100vh;" name="" id="HTMLCODE" cols="30" rows="10"></textarea>
+  
+</div>
+
+
+<document id="HTMLADDCODE">
+  
+</document>
