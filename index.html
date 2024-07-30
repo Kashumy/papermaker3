@@ -4376,7 +4376,7 @@ var pausemove=0
 function movePlayer(dx, dy) {
   
   if(pausemove==0){
-  const maxHistoryLength = 50;
+  const maxHistoryLength = 200;
 
 
 
@@ -4573,8 +4573,38 @@ function check(){
     const rect1 = player.getBoundingClientRect();
     const rect2 = tile.getBoundingClientRect();
     const wallThickness = 2;
-    if (rect1.bottom > rect2.top - 4 &&
-      rect1.top < rect2.bottom + 4 &&
+    
+  }
+//  requestAnimationFrame(check)
+}
+/*
+if (rect1.bottom > rect2.top - 5 &&
+rect1.top < rect2.bottom + 5 &&
+rect1.right > rect2.left - 5 &&
+rect1.left < rect2.right + 5) {
+*/
+var collidingjump=0
+var collidingjump2=0
+/* PLAYER COLLISION*/
+      function collision() {
+        if( config.debugmode==0 && isgamepaused==0 ) {
+        for(let i=0; i<1;i++){
+          
+        for (let tile of tiles) {
+          const rect1 = player.getBoundingClientRect();
+          const rect2 = tile.getBoundingClientRect();
+          const wallThickness = 2;
+          if(false){
+            
+            
+
+
+
+
+
+          }else{
+if (rect1.bottom > rect2.top - 4 &&
+      rect1.top < rect2.bottom - 4 &&
       rect1.right  > rect2.left + 4 &&
       rect1.left < rect2.right - 4) {
   to1+=1
@@ -4594,36 +4624,6 @@ function check(){
         to1=1
       },1000)
     }
-  }
-//  requestAnimationFrame(check)
-}
-/*
-if (rect1.bottom > rect2.top - 5 &&
-rect1.top < rect2.bottom + 5 &&
-rect1.right > rect2.left - 5 &&
-rect1.left < rect2.right + 5) {
-*/
-var collidingjump=0
-var collidingjump2=0
-/* PLAYER COLLISION*/
-      function collision() {
-        if( config.debugmode==0 && isgamepaused==0 ) {
-        for(let i=0; i<1;i++){
-          check()
-        for (let tile of tiles) {
-          const rect1 = player.getBoundingClientRect();
-          const rect2 = tile.getBoundingClientRect();
-          const wallThickness = 2;
-          if(false){
-            
-            
-
-
-
-
-
-          }else{
-
           if (rect1.top < rect2.bottom + 3 && rect1.bottom > rect2.bottom + 5 && rect1.right > rect2.left && rect1.left < rect2.right) {
             playerY +=power * speed;
             player.style.top = playerY * tileSize + 'px';
@@ -5884,7 +5884,7 @@ function loadfile() {
 
   const input = document.createElement('input');
   input.type = 'file';
-  let specialname2=".dl , .js"
+  let specialname2=".js"
 input.accept=`${specialname2}`
 
   input.addEventListener('change', function() {
@@ -5941,7 +5941,7 @@ loadingdata=1
 setTimeout(function(){
   lastplayerpos.push({ x: playerX, y: playerY });
   loadingdata=0
-},4000)
+},7000)
     playerY = tdt.spawnY-0.5;
     playerX = tdt.spawnX;
     lastplayerpos.push({ x: playerX, y: playerY });
