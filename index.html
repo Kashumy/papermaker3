@@ -1,4 +1,5 @@
  
+
  
 
 <!-- PAPERMAKER 3 free license -->
@@ -74,7 +75,7 @@ var config ={  "HpBarConfiguration": {
 <script src="./bigexample.js"></script>
 <script>
             if (!('defps' in config)) {
-            config['defps'] = 12;
+            config['defps'] = 15;
           }
           var defaultFps = config.defps;
           var targetFPS = config.defps;
@@ -110,8 +111,7 @@ function toggle(value) {
 just a pme 3.5+ full  </div>
 `,`
 <div style=' color: rgb(100,250,240);  height:90vh; width:90vw'>
-  in this version:
-:LInEQ110==
+  v1.3.5.1E
   </div>
 `];
 
@@ -4383,8 +4383,9 @@ if(by4<2){
 }else{
   by4=0
   // Add the current position to the history array
+  if(loadingdata==0){
   lastplayerpos.push({ x: playerX, y: playerY });
-
+}
   // Ensure the history array does not exceed the maximum length
   if (lastplayerpos.length > maxHistoryLength) {
     lastplayerpos.shift(); // Remove the oldest element
@@ -4576,7 +4577,8 @@ function check(){
       rect1.left < rect2.right - 4) {
   to1+=1
   //alert(to1)
-      cofnijczas(to1)
+  if(loading==0){
+      cofnijczas(to1);}
      // console.log("oh")
       //alert("he")
       //    VelocityY = -0.01;
@@ -4725,7 +4727,7 @@ var tlo2 = 0
 function loop() {
    
   if (!('defps' in config)) {
-  config['defps'] = 12;
+  config['defps'] = 15;
 }
 frameTime = 1000 / config.defps;
   if (!('screenfilter' in config)) {
@@ -5875,6 +5877,7 @@ toonce = 0;
         content.style.backgroundImage = '';
     }
 }
+var loadingdata=0
 function loadfile() {
 
   const input = document.createElement('input');
@@ -5932,6 +5935,11 @@ killed=config.killed
 if (!('playershoots' in config)) {
   config['playershoots'] = 0
 }
+loadingdata=1
+setTimeout(function(){
+  lastplayerpos.push({ x: playerX, y: playerY });
+  loadingdata=0
+},4000)
     playerY = tdt.spawnY-0.5;
     playerX = tdt.spawnX;
     lastplayerpos.push({ x: playerX, y: playerY });
