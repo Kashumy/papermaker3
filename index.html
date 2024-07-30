@@ -4278,6 +4278,8 @@ if (config.oldmusic.slice(0, 10) !== config.oldmusic) {
         }
     }
 }}
+setTimeout(updateViewport,4000)
+setTimeout(updateViewport,6000)
 function normspeed() {
   const nearestDistanceThreshold = 25; 
   let nearestDistance = Number.MAX_SAFE_INTEGER;
@@ -4369,6 +4371,7 @@ var thiy=0
 var blockspassed=0
 var updatevpifblockspassed=20
 let by4=0
+var loadingdata=0
 var pausemove=0
 function movePlayer(dx, dy) {
   
@@ -5876,7 +5879,7 @@ toonce = 0;
         content.style.backgroundImage = '';
     }
 }
-var loadingdata=0
+
 function loadfile() {
 
   const input = document.createElement('input');
