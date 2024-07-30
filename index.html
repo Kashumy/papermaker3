@@ -1,9 +1,9 @@
-
+ 
  
 
-<!-- PAPERMAKER 3 free license -->
+<!-- PAPERMAKER 3.5 free license -->
 
-  <!-- VERSION : 3+ -->
+  <!-- VERSION : 3.5+ -->
 
 <!-- list  -->
 <!-- config,
@@ -23,9 +23,7 @@ loop-->
           var resetMusicifdeath = 1
           var disableDEBUGPAUSE=0
           
-          
-          let defaultFps = 15;
-          let targetFPS = 15;
+
 </script>
 <style>
   html{
@@ -74,9 +72,15 @@ var config ={  "HpBarConfiguration": {
 </script>
 <script src="./defaul.js"></script>
 <script src="./bigexample.js"></script>
-
+<script>
+            if (!('defps' in config)) {
+            config['defps'] = 12;
+          }
+          var defaultFps = config.defps;
+          var targetFPS = config.defps;
+</script>
 <script src="//cdn.jsdelivr.net/npm/eruda"></script>
-<script>eruda.init();</script>
+<script>eruda.init();</script> 
 <!-- HEY PUT HERE YOUR PROJECt Path -->
 <!-- ---------+----+----+----------- -->
 <!-- ---------+----+----+----------- -->
@@ -103,17 +107,11 @@ function toggle(value) {
   const textsArray = [
 `
 <div style=' color: rgb(100,250,240);  height:90vh; width:90vw'> 
-just a pme 3.5+ experimental edition </div>
+just a pme 3.5+ full  </div>
 `,`
 <div style=' color: rgb(100,250,240);  height:90vh; width:90vw'>
   in this version:
-- WoW now game has 1/2 lags less :) 
-- added shader (antianalising),(antianalising_toviewport+)
-- bug fixed 
- errors funded:
- - collision bug with block size 1.5 near other block underneath and more collisions error (add time undo if you are inside)
- - SPRITES is new Thing and it is on some aspect buggy
-
+:LInEQ110==
   </div>
 `];
 
@@ -610,6 +608,16 @@ function saveToFileasJs() {
     text-align: center;
     margin-top: 10px;
   }
+  #vpfilter{
+    z-index: 50;
+   width:999999999999999999999999pc; 
+   height:99999999999999999999999pc;
+   height: 100%;
+    touch-action: none;
+    pointer-events: none;
+overflow: hidden auto;
+position: absolute ;
+  }
 </style>
 </head>
 <body>
@@ -618,24 +626,106 @@ function saveToFileasJs() {
   </div>
   <div id="alaviewport">
 <div id="resizableHandle" class="">drag to resize renderer</div>
-  <div id="viewport" >
+
+</div>
+
+  <div id="viewport"  >
+
+    <div id="viewport2">
+      
+
   <div id="player" class="player">
   </div>
   <div id="playerskin"></div>
   <div id="content"></div>
+  
     <div id="Econtent" ></div>
     <div id="Scontent" ></div>
     <div id="Tcontent" ></div>
 <div id="Dcontent" ></div>
-</div></div>
+</div></div></div>
   <div id="project2">
   </div>
    <div class="playPauseButton" id="playPauseButton" onclick="togglePlayPause()">
      <span id="icon">⏸️</span>
    </div>
-   <div class="playPauseButton" id="playPauseButton" style="right:40px" onclick="restart()">
+   <div class="playPauseButton" id="playPauseButton2" style="right:40px" onclick="restart()">
      <span id="icon">🔁</span>
    </div>
+
+
+<style>body {
+            margin: 0;
+            padding: 0;
+            
+            height: 100vh;
+            background-color: #f0f0f0;
+            overflow: hidden;
+        }
+
+     /*   #viewport2 {
+            position: absolute;
+            background-color: #4a90e2;
+            color: white;
+            font-size: 20px;
+            width:200px;height: 200px;
+           
+            transform: perspective(2px) rotateX(3deg) translateY(-50px) ;
+            
+            animation: wave 5s infinite;
+        }*/
+/*
+        #viewport {
+            width: 200px;
+            height: 200px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #42445A;
+            overflow: hidden;
+            
+        }*/
+
+
+
+        @keyframes wave {
+            0% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(10px);
+            }
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+    /*    #viewport2::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            pointer-events: none;
+            animation: blurWave 5s infinite;
+        }*/
+
+        @keyframes blurWave {
+            0% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(5px);
+            }
+            100% {
+                transform: translateY(0px);
+            }
+        }</style>
+
 <script>
 
 if(disableDEBUGPAUSE==1){
@@ -1486,7 +1576,18 @@ tile.dataset.s = t;
 
 /* RENDERING */
 function updateViewport() {
+  
   content.innerHTML=""
+  
+  content.innerHTML+=`<div id="vpfilter"></div>`
+  if (!('screenfilter' in config)) {
+  config['screenfilter'] = [0, 0, 0, 0];
+}
+if(document.getElementById('vpfilter')){
+document.getElementById('vpfilter').style.background=`rgba(${config.screenfilter[0]*255},${config.screenfilter[1]*255},${config.screenfilter[2]*255},${config.screenfilter[3]})`;
+  document.getElementById('vpfilter').style.width=99**20+"px"
+  document.getElementById('vpfilter').style.height=99**20+"px"
+  document.getElementById('vpfilter').style.zoom=document.getElementById('viewport').style.zoom}
   const scrollLeft = viewport.scrollLeft;
   const scrollTop = viewport.scrollTop;
   const { numVisibleTilesX, numVisibleTilesY } = calculateVisibleTiles();
@@ -1610,7 +1711,9 @@ const similarDeletedTile = deletedtiles.find((deletedTile) => {
         });}
       }
   }
+  
   content.appendChild(fragment);
+  
 }
 if (!('deletedtiles' in config)) {
 
@@ -1994,13 +2097,13 @@ ifvariablekillthiswhencollision,
 ifvariablekillthiswhenshown,
 regenerateplayerpos,
 removefroviewpirtifoutside,
+BLOCKTYPE,
 weird3dblockwall,
 hideshowplayer,
 customhitboxplayercollision,
-BLOCKTYPE
-
-
-, nothing 
+playerstayup,
+collisionfilter,
+nothing
         ] = tileConfig[tileId];
 
         var tiles = document.querySelectorAll(`.${tileId}`);
@@ -2692,7 +2795,7 @@ if(customhitboxplayercollision!==undefined&&customhitboxplayercollision!==null&&
   dist=customhitboxplayercollision
 }
                 if(distanceToPlayer <= dist ){
-                  
+
                   
 if( hideshowplayer==1){
   document.getElementById('playerskin').style.opacity="1"
@@ -2716,6 +2819,13 @@ if (BLOCKTYPE == 'float') {
   
 if(oldGravity==null||oldGravity==undefined){oldGravity=gravity}
 gravity=0
+}
+if (collisionfilter !== null && collisionfilter !== undefined) {
+  //alert(collisionfilter)
+  //   let [x1, y1, x2, y2]=collisionfilter
+  console.log(config.screenfilter)
+  //  config.screenfilter=[x1, y1, x2, y2]
+  config.screenfilter = collisionfilter
 }
 if (ifvariablekillthiswhencollision !== undefined && ifvariablekillthiswhencollision !== null) {
   let name = ifvariablekillthiswhencollision[0];
@@ -2805,6 +2915,10 @@ config.folder.texture.player[3]=playertextureup
 }*/
 if (playertexturestaydown !== undefined) {
 config.folder.texture.player[7]=playertexturestaydown
+}
+if (playerstayup !== undefined) {
+  config.folder.texture.player[9] = playerstayup
+  
 }
 if (playertexturestayleft !== undefined) {
 config.folder.texture.player[5]=playertexturestayleft
@@ -3865,8 +3979,9 @@ function handleFileSelect4(event) {
 
 var last = TILES[TILES.length - 1][2]
 </script>
+<div id="information1bar">
 <p style="position:fixed; bottom: 0px; left:50vw; transform: translate(-50%,0%); z-index: 99999; color:white">killed: <t id="killed"></t></p>
-<p style="position:fixed; bottom: 0px; left:calc(50vw + 80px); transform: translate(-50%,0%); z-index: 99999; color:white">score: <t id="score"></t></p>
+<p style="position:fixed; bottom: 0px; left:calc(50vw + 80px); transform: translate(-50%,0%); z-index: 99999; color:white">score: <t id="score"></t></p></div>
 <script>
 function test00(){
   document.getElementById('killed').innerHTML=killed
@@ -4282,8 +4397,15 @@ if(by4<3){
     smallestVect=viewportHeight
   }
   blockspassed++;
-  if(speed<4){
+  if(speed<3){
   if (isScrolling && blockspassed > updatevpifblockspassed*speed) {
+    blockspassed = 0
+    if (config.roommode !== 1&&config.roommode !== 1) {
+  updateViewport()}
+    isScrolling = false;
+  
+  }}else if(speed<5){
+  if (isScrolling && blockspassed > updatevpifblockspassed*speed-3) {
     blockspassed = 0
     if (config.roommode !== 1&&config.roommode !== 1) {
   updateViewport()}
@@ -4448,10 +4570,10 @@ function check(){
     const rect1 = player.getBoundingClientRect();
     const rect2 = tile.getBoundingClientRect();
     const wallThickness = 2;
-    if (rect1.bottom > rect2.top - 1 &&
-      rect1.top < rect2.bottom + 1 &&
-      rect1.right - 1 > rect2.left - 1 &&
-      rect1.left < rect2.right + 1) {
+    if (rect1.bottom > rect2.top - 4 &&
+      rect1.top < rect2.bottom + 4 &&
+      rect1.right  > rect2.left + 4 &&
+      rect1.left < rect2.right - 4) {
   to1+=1
   //alert(to1)
       cofnijczas(to1)
@@ -4460,6 +4582,7 @@ function check(){
       //    VelocityY = -0.01;
       Centercol = 1;
       topside = 0;
+      gravityvelocity=0
       /*   playerY -= 0.6;*/
     //  playerX -= 0.1;
     }else{
@@ -4482,6 +4605,7 @@ var collidingjump2=0
       function collision() {
         if( config.debugmode==0 && isgamepaused==0 ) {
         for(let i=0; i<1;i++){
+          check()
         for (let tile of tiles) {
           const rect1 = player.getBoundingClientRect();
           const rect2 = tile.getBoundingClientRect();
@@ -4589,21 +4713,73 @@ function h(){
 var by3=0
 let toto = 0;
 let iindex = 0;
-let frameTime = 1000 / targetFPS;
+var frameTime = 1000 / targetFPS;
 let gravityvelocity = 1
 var tlo2 = 0
       function anim() {
       }
       var yyy=0
       let yzd=0
+      var running=0
+      var oldspeedd=0
 function loop() {
+   
+  if (!('defps' in config)) {
+  config['defps'] = 12;
+}
+frameTime = 1000 / config.defps;
+  if (!('screenfilter' in config)) {
+  config['screenfilter'] = [0,0,0,0];
+}
+if (!('runningspeed' in config)) {
+  config['runningspeed'] = 3;
+}
+if(running==1){
+  if(oldspeedd!==speed){
+    oldspeedd=speed
+  }
+  speed=config.runningspeed
+}else{
+   
+  speed=config.speed
+}
+ 
   if (document.getElementById('Jump')) {
   cantsavebugfix=1
 }else{
   cantsavebugfix=0
 }
+if (document.getElementById('Run')) {
+  document.getElementById('Run').addEventListener('touchstart', function(event) {
+    event.preventDefault(); // Prevent default behavior
+    running = 1;
+  });
+  document.getElementById('Run').addEventListener('touchend', function() {
+    running = 0;
+  });
+}
 if (!('renderertype' in config)) {
   config['renderertype'] = 1;
+}
+if (!('information1bar' in config)) {
+  config['information1bar'] = 1;
+}if (!('information2bar' in config)) {
+  config['information2bar'] = 1;
+}
+if (!('information3bar' in config)) {
+  config['information3bar'] = 1;
+}
+if(config.information1bar==1){
+document.getElementById('information1bar').style.display="block"}else{
+  document.getElementById('information1bar').style.display="none"
+}
+if(config.information2bar==1){
+document.getElementById('playPauseButton').style.display="block"}else{
+  document.getElementById('playPauseButton').style.display="none"
+}
+if(config.information3bar==1){
+document.getElementById('playPauseButton2').style.display="block"}else{
+  document.getElementById('playPauseButton2').style.display="none"
 }
 if(config.renderertype==1){
   // antianalising 
@@ -4676,7 +4852,7 @@ if (!('gravityvelocityspeed' in config)) {
 }
   if(config.zoom!==1&&config.zoom!==0&&config.zoom!==undefined&& config.testmode==1){
    viewport.style.zoom= config.zoom
-   document.getElementById('content2').style.zoom=config.zoom
+   document.querySelector('#content2').style.zoom = document.querySelector('#viewport').style.zoom;
   }
 if (!('dimension' in config)) {
 
@@ -4727,11 +4903,18 @@ resizableDiv.style.height = `${newHeight}px`;
         jump2(event);
       }
       break;
+    case 'c':
+      if (document.getElementById('Run')) {
+        running = 1;
+      }
+      break;
+
     case 'a':
       if (document.getElementById('Left')) {
         leftButtonDown = 1;
       }
       break;
+      
     case 's':
       if (document.getElementById('Down')) {
         downButtonDown = 1;
@@ -4776,6 +4959,12 @@ document.addEventListener('keyup', function(event) {
         leftButtonDown = 0;
       }
       break;
+      case 'c':
+      if (document.getElementById('Run')) {
+        running = 0;
+      }
+      break;
+
     case 's':
       if (document.getElementById('Down')) {
         downButtonDown = 0;
@@ -4784,6 +4973,8 @@ document.addEventListener('keyup', function(event) {
     case 'd':
       if (document.getElementById('Right')) {
         rightButtonDown = 0;
+        
+        
       }
       break;
     case 'x':
@@ -5078,7 +5269,7 @@ function dld(){
 }*/
 content.addEventListener('click', buildBlock);
 
-const maxHistoryLength = 20;
+const maxHistoryLength = 200;
 function upd10() {
 
   lastplayerpos.push({ x: playerX, y: playerY });
@@ -5480,7 +5671,8 @@ function toggleLayers() {
     background-position:0% 0%;
     image-rendering: pixelated; 
 }
-.menu-toggle {cursor: none;border-radius: 100%;background-color: #4CAF50;color: white;padding: 20px 20px;border: none; position: fixed; bottom: 50%; left:0px; z-index: 99999;}.menu-toggle:hover {background-color: #45a049;}.menu-container:hover .menu-content {display: block;} .mn div{ cursor: none;background-color: #4CAF50;color: white;padding: 5px 20px;border: none;width:calc(100% - 0px);}
+.menu-toggle {cursor: none;border-radius: 100%;background-color: #4CAF50;color: white;padding: 20px 20px;border: none; position: fixed; bottom: 50%; left:0px; z-index: 99999;}.menu-toggle:hover {background-color: #45a049;}.menu-container:hover .menu-content {display: block;} 
+.mn div{ cursor: none;background-color: #4CAF50;color: white;padding: 5px 20px;border: none;width:calc(100% - 0px);}
 .menu2-content {background-color: #0E0E0E;padding: 5px;position: fixed;border: 1px solid #1C1C1C;top: 50%;left: 50%;transform: translate(-50%,-50%);
   width:95%;height:95%;overflow: hidden; 
   color:white;
@@ -5567,6 +5759,13 @@ Close Menu
 <div onclick="handleFileContent(JSON.stringify(example2));toggleMENS()">
   load example platformer game
 </div>
+<div onclick="config.information1bar=1"> show infos Killed Score </div>
+<div onclick="config.information1bar=0"> hide infos Killed Score </div>
+
+<div onclick="config.information2bar=1"> show pause </div>
+<div onclick="config.information2bar=0"> hide pause </div>
+<div onclick="config.information3bar=1"> show restart() </div>
+<div onclick="config.information3bar=0"> hide restart() </div>
 <div onclick="
 loadtestgame();toggleMENS()
 ">
@@ -6008,7 +6207,10 @@ config.entities[entityName][index] = newValue;
         newValue = input.value;
         if (!isNaN(newValue)) {
           newValue = parseFloat(newValue);
+        }else{
+          
         }
+        let parsedValue = (newValue);
                 if (parsedValue == "null" || parsedValue == "undefined" || parsedValue == "") {
 
           newValue = null 
@@ -6151,7 +6353,8 @@ if (file) {
 "Weird 3D block if player on bottom this ZIndex=1 else ZIndex=10 (1/0)",
 "Hide(0)/Show(1) 'player' (else do nothing)",
 "CUSTOM EVENT COLLISION DISTANCE < def=1 full block",
-
+"T: change player texture stay up",
+"collision change screen filter [r,g,b,a] example:[\"1\",\"1\",\"1\",\"0.5\"]",
 `<p style='animation: 5s rainbow infinite;'>3.0[nafu] not a finnal update  50% of this instructions configuration are not understandable for a human :P  <br><br> IMPORTANT : do not use ' use instead " make JSON OBJECT '[]' like this :["variable",1,"="] <br> type :null <br> to disable option</p>`,
 /*
 playertextureleft,
@@ -6362,7 +6565,11 @@ scale
 <input type="text" id="leftInput" oninput="editInputVariable2(this.value, 'norspeed'); updspeed()">
 <button onclick="handleFileButtonClickA('fileInput1', 1)">player backspeed</button>
 <input type="text" id="leftInput" oninput="editInputVariable2(this.value, 'backspeed'); updspeed()">
+
+<button onclick="handleFileButtonClickA('fileInput1', 1)">player running speed</button>
+<input type="text" id="leftInput" oninput="editInputVariable2(this.value, 'runningspeed'); updspeed()">
 <hr>
+
 <button onclick="handleFileButtonClickA('fileInput1', 1)">player SIZE</button>
 <input type="text" id="leftInput" oninput="editInputVariable30(this.value, 'playersizeNOHITBOX'); updspeed()">
 <button onclick="handleFileButtonClickA('fileInput1', 1)">player SIZE With HITBOX(1/0)</button>
@@ -6379,6 +6586,9 @@ gravityvelocityspeed
 
 <br>
 <input type="text" id="leftInput" value="1" oninput="editInputVariable20(this.value, 'airjump'); updspeed()">airjump 
+
+<br><hr>
+<input type="text" id="leftInput" value="1" oninput="editInputVariable20(this.value, 'defps'); updspeed()" value="13" >MAX FPS ( makes game more smothered if greater but game will be slower on low frequency devices ) 12Fps/, old 15Fps
 <script>
 function updspeed(){
   speed=config.speed
@@ -7813,11 +8023,11 @@ function update1(){
             cursor: move;
             background-color: #4CAF50;
             color: white;
-            padding: 10px 20px;
             text-align: center;
             text-decoration: none;
             display: inline-block;
             font-size: 16px;
+            padding: 10px;
             margin: 4px 2px;
         }
         #modal-container {
@@ -7870,7 +8080,7 @@ function update1(){
             <br>
             <input type="text" id="tekstInput" placeholder="content text">
             <br>
-            <input type="text" id="IdInput" placeholder="Left,Right,Up,Down,Attack,Jump">
+            <input type="text" id="IdInput" placeholder="Left,Right,Up,Down,Attack,Jump,Run">
             <br>
             <button onclick="dodajPrzyciskZModalu()">add button</button>
 <button onclick="dodajPrzyciskZModalu2()">add button with image</button>
@@ -9373,4 +9583,3 @@ l
 <document id="HTMLADDCODE">
   
 </document>
- 
