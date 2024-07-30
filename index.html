@@ -1,9 +1,9 @@
  
  
 
-<!-- PAPERMAKER 3.5 free license -->
+<!-- PAPERMAKER 3 free license -->
 
-  <!-- VERSION : 3.5+ -->
+  <!-- VERSION : 3+ -->
 
 <!-- list  -->
 <!-- config,
@@ -4378,7 +4378,7 @@ function movePlayer(dx, dy) {
 
 
 
-if(by4<3){
+if(by4<2){
   by4++;
 }else{
   by4=0
@@ -5879,7 +5879,7 @@ function loadfile() {
 
   const input = document.createElement('input');
   input.type = 'file';
-  let specialname2=".dl"
+  let specialname2=".dl , .js"
 input.accept=`${specialname2}`
 
   input.addEventListener('change', function() {
@@ -5934,6 +5934,7 @@ if (!('playershoots' in config)) {
 }
     playerY = tdt.spawnY-0.5;
     playerX = tdt.spawnX;
+    lastplayerpos.push({ x: playerX, y: playerY });
     if(!(config.folder)){
     }
     if (!('stickybg1' in config)) {
